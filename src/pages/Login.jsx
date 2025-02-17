@@ -1,36 +1,24 @@
 import React from 'react';
 import '../App.css';
-import { AppProvider } from '@toolpad/core/AppProvider';
-import { SignInPage } from '@toolpad/core/SignInPage';
-import { useTheme } from '@mui/material/styles';
-
-// preview-start
-const providers = [{ id: 'credentials', name: 'Email and Password' }];
-// preview-end
-
-const signIn = async (provider, formData) => {
-  const promise = new Promise((resolve) => {
-    setTimeout(() => {
-      alert(
-        `Signing in with "${provider.name}" and credentials: ${formData.get('email')}, ${formData.get('password')}`,
-      );
-      resolve();
-    }, 300);
-  });
-  return promise;
-};
+import { Link } from 'react-router-dom';
+import Input from '../components/Input';
+import Button from '../components/Button';
 
 export default function Login() {
-  const theme = useTheme();
   return (
-    // preview-start
-    <AppProvider theme={theme}>
-      <SignInPage
-        signIn={signIn}
-        providers={providers}
-        slotProps={{ emailField: { autoFocus: false } }}
-      />
-    </AppProvider>
-    // preview-end
+    <div className='flex justify-center items-center h-screen'>
+      <div className='themeCard px-5 rounded-md py-5'>
+        <h1 className='text-center text-3xl mb-4'>Login</h1>
+        <Input name="Email" type="Text" />
+        <Input name="Password" type="Password" />
+        <div className='flex justify-center items-center mb-1'>
+          <Link className='text-center cursor-pointer w-full text-sm' to="/register">Create an Account</Link>
+        </div>
+        <p className='text-center mb-3 cursor-pointer text-sm'>Forgot Password</p>
+        <div className='flex justify-center items-center mb-3'>
+          <Button name="Login"/>
+        </div>
+      </div>
+    </div>
   );
 }
