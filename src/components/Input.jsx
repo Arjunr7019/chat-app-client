@@ -3,9 +3,10 @@ import '../App.css'
 
 export default function Input({ name, type }) {
     return (
-        <div className='relative mb-4'>
-            <input id='inputText' className='inputForm w-2xs rounded-md p-2' style={{ border: "1px solid #1515154d" }} type={type} />
-            <label className='inputLabel' htmlFor="inputText">{name}</label>
+        <div className='relative w-full' style={name === "Message"?{marginBottom:"0"}:{marginBottom:"1rem"}}>
+            <input id='inputText' className='inputForm rounded-md p-2' placeholder={name === "Message" ? "Message" : ""} 
+            style={name === "Message" ? { border: "1px solid #1515154d",width:"100%" }:{ border: "1px solid #1515154d",width:"18rem" }} type={type} />
+            {name === "Message" ? <></> : <label className='inputLabel' htmlFor="inputText">{name}</label>}
         </div>
     )
 }
