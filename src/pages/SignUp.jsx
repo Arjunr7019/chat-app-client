@@ -7,6 +7,22 @@ import Button from '../components/Button';
 export default function SignUp() {
   const[inputData,setInputData] = useState({name:"",email:"",gender:"",password:""});
 
+  const handelSignUp = () => {
+    fetch("https://chat-app-server-0lgm.onrender.com/api/user/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        body: inputData
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log("Success:", data))
+      .catch((error) => console.error("Error:", error));
+  };
+  
+
   return (
     <div className='flex justify-center items-center h-screen'>
       <div className='themeCard px-5 rounded-md py-5'>
@@ -19,7 +35,7 @@ export default function SignUp() {
           <Link className='text-center cursor-pointer w-full text-sm' to="/login">Already have an Account</Link>
         </div>
         <div className='flex justify-center items-center mb-3'>
-          <Button onClick={()=> console.log(inputData)} name="Sign Up"/>
+          <Button onClick={()=> handelSignUp()} name="Sign Up"/>
         </div>
       </div>
     </div>
