@@ -4,11 +4,14 @@ import './index.css'
 import App from './App.jsx';
 import { BrowserRouter } from 'react-router-dom';
 import "@fontsource/ubuntu";
+import { UserAuthProvider } from './context/UserAuth'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <UserAuthProvider>
+        <App />
+      </UserAuthProvider>
     </BrowserRouter>
   </StrictMode>,
 )

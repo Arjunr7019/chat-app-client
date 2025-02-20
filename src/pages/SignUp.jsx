@@ -1,22 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../App.css';
 import Input from '../components/Input';
 import { Link } from 'react-router-dom';
 import Button from '../components/Button';
 
 export default function SignUp() {
+  const[inputData,setInputData] = useState({name:"",email:"",gender:"",password:""});
+
   return (
     <div className='flex justify-center items-center h-screen'>
       <div className='themeCard px-5 rounded-md py-5'>
         <h1 className='text-center text-3xl mb-4'>SignUp</h1>
-        <Input name="Email" type="Text" />
-        <Input name="Gender" type="Text" />
-        <Input name="Password" type="Password" />
+        <Input value={inputData.name} onChange={(e)=> setInputData(val=>{return{...val, name:e.target.value}})} name="Name" type="Text" />
+        <Input value={inputData.email} onChange={(e)=> setInputData(val=>{return{...val, email:e.target.value}})} name="Email" type="Text" />
+        <Input value={inputData.gender} onChange={(e)=> setInputData(val=>{return{...val, gender:e.target.value}})} name="Gender" type="Text" />
+        <Input value={inputData.password} onChange={(e)=> setInputData(val=>{return{...val, password:e.target.value}})} name="Password" type="Password" />
         <div className='flex justify-center items-center mb-3'>
           <Link className='text-center cursor-pointer w-full text-sm' to="/login">Already have an Account</Link>
         </div>
         <div className='flex justify-center items-center mb-3'>
-          <Button name="Sign Up"/>
+          <Button onClick={()=> console.log(inputData)} name="Sign Up"/>
         </div>
       </div>
     </div>

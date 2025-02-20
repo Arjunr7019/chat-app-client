@@ -12,6 +12,13 @@
     background-color: white;
     padding: 0 2px;
 }
+.inputLabelActive {
+    position: absolute;
+    left: 5%;
+    top: -25%;
+    background-color: white;
+    padding: 0 2px;
+}
 .buttonTheme{
     transition: .4s ease-in-out;
 }
