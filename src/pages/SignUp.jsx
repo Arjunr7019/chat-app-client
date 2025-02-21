@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import '../App.css';
 import Input from '../components/Input';
 import { Link } from 'react-router-dom';
 import Button from '../components/Button';
+import { UserAuthContext } from '../context/UserAuth';
 
 export default function SignUp() {
   const[inputData,setInputData] = useState({name:"",email:"",gender:"",password:""});
+  const{setUserData} = useContext(UserAuthContext);
 
   const handelSignUp = () => {
     fetch("https://chat-app-server-0lgm.onrender.com/api/user/register", {
@@ -18,7 +20,7 @@ export default function SignUp() {
       }),
     })
       .then((response) => response.json())
-      .then((data) => console.log("Success:", data))
+      .then((data) => setUserData(data))
       .catch((error) => console.error("Error:", error));
   };
   
