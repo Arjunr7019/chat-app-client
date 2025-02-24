@@ -1,9 +1,9 @@
 const setUser = async()=>{
-    await localStorage.setItem('userData', JSON.stringify(value))
+    await localStorage.setItem('ChatAppUserData', JSON.stringify(value))
 }
 
 const getUser = async()=>{
-    const value = await localStorage.getItem('userData');
+    const value = await localStorage.getItem('ChatAppUserData');
     return JSON.parse(value);
 }
 

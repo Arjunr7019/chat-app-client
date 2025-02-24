@@ -4,10 +4,13 @@ import { Link } from 'react-router-dom';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { UserAuthContext } from '../context/UserAuth';
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [inputData, setInputData] = useState({ email: "", password: "" });
   const { setUserData } = useContext(UserAuthContext);
+
+  const navigate = useNavigate();
 
   const handelLogin = () => {
     fetch("https://chat-app-server-0lgm.onrender.com/api/user/login", {
@@ -19,9 +22,18 @@ export default function Login() {
         body: inputData
       }),
     })
-      .then((response) => response.json())
-      .then((data) => setUserData(data))
-      .catch((error) => console.error("Error:", error));
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json(); // Parse the JSON only if status is 200
+      } else {
+        throw new Error(`Failed with status: ${response.status}`);
+      }
+    })
+    .then((data) => {
+      setUserData(data);
+      navigate("/");
+    })
+    .catch((error) => console.error("Error:", error));
   };
 
   return (

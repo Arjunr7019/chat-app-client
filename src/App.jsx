@@ -6,13 +6,22 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Chat from './pages/Chat';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
+import { useNavigate } from "react-router-dom";
 
 function App() {
   const{setUserData} = useContext(UserAuthContext);
 
+  const navigate = useNavigate();
+
   useEffect(()=>{
     Services.getUser().then(res=>{
-      res ? setUserData(res) : setUserData(null);
+      if(res){
+        setUserData(res);
+        navigate("/")
+      }else{
+        setUserData(null);
+        navigate("/login")
+      }
     })
   },[])
   return (
