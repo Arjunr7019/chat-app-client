@@ -1,0 +1,1 @@
+export const baseUrl = "https://chat-app-server-0lgm.onrender.com/api"

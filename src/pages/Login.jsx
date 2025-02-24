@@ -5,6 +5,8 @@ import Input from '../components/Input';
 import Button from '../components/Button';
 import { UserAuthContext } from '../context/UserAuth';
 import { useNavigate } from "react-router-dom";
+import Services from '../localStorage/Services';
+import { baseUrl } from '../assets/Endpoints';
 
 export default function Login() {
   const [inputData, setInputData] = useState({ email: "", password: "" });
@@ -13,13 +15,14 @@ export default function Login() {
   const navigate = useNavigate();
 
   const handelLogin = () => {
-    fetch("https://chat-app-server-0lgm.onrender.com/api/user/login", {
+    fetch(`${baseUrl}/user/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        body: inputData
+        email:inputData.email,
+        password:inputData.password
       }),
     })
     .then((response) => {
@@ -32,6 +35,7 @@ export default function Login() {
     .then((data) => {
       setUserData(data);
       navigate("/");
+      Services.setUser(data)
     })
     .catch((error) => console.error("Error:", error));
   };

@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import Button from '../components/Button';
 import { UserAuthContext } from '../context/UserAuth';
 import { useNavigate } from "react-router-dom";
+import Services from '../localStorage/Services';
+import { baseUrl } from '../assets/Endpoints';
 
 export default function SignUp() {
   const [inputData, setInputData] = useState({ name: "", email: "", gender: "", password: "" });
@@ -13,13 +15,16 @@ export default function SignUp() {
   const navigate = useNavigate();
 
   const handelSignUp = () => {
-    fetch("https://chat-app-server-0lgm.onrender.com/api/user/register", {
+    fetch(`${baseUrl}/user/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        body: inputData
+        name:inputData.name,
+        email:inputData.email,
+        gender:inputData.gender,
+        password:inputData.password
       }),
     })
       .then((response) => {
@@ -32,6 +37,7 @@ export default function SignUp() {
       .then((data) => {
         setUserData(data);
         navigate("/");
+        Services.setUser(data);
       })
       .catch((error) => console.error("Error:", error));
   };
