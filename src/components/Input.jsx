@@ -8,7 +8,7 @@ export default function Input({ name, type,value,onChange }) {
                 id='inputText'
                 className='inputForm rounded-md p-2'
                 placeholder={name === "Message" ? "Message" : ""}
-                style={name === "Message" ? { border: "1px solid #1515154d", width: "100%" } : { border: "1px solid #1515154d", width: "18rem" }}
+                style={name === "Message" ? { width: "100%" } : { width: "18rem" }}
                 type={type}
                 autoComplete={name === "Message" ? "off" : "on"} 
                 onChange={onChange}

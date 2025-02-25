@@ -12,6 +12,15 @@
     background-color: white;
     padding: 0 2px;
 }
+.inputForm {
+    border: 1px solid #1515154d;
+    outline: none;
+    transition: .4s ease-in-out;
+}
+.inputForm:focus {
+    border: 1px solid black;
+    outline: 1px solid black;
+}
 .inputLabelActive {
     position: absolute;
     left: 5%;

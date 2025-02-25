@@ -1,4 +1,4 @@
-const setUser = async()=>{
+const setUser = async(value)=>{
     await localStorage.setItem('ChatAppUserData', JSON.stringify(value))
 }
 
@@ -8,7 +8,7 @@ const getUser = async()=>{
 }
 
 const Logout = ()=>{
-    localStorage.clear();
+    localStorage.removeItem('ChatAppUserData');
 }
 
 export default {

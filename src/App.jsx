@@ -14,7 +14,7 @@ function App() {
   const { setUserData } = useContext(UserAuthContext);
   const [serverUp, setServerUp] = useState(false);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   ripples.register()
 
   useEffect(() => {
@@ -26,24 +26,24 @@ function App() {
       }
     }).then((data) => {
       setServerUp(true);
-      console.log("serverUp")
+      // console.log("serverUp")
     }).catch(err => {
       console.log("error:", err);
       setServerUp(false)
     })
   }, [])
 
-  useEffect(() => {
-    Services.getUser().then(res => {
-      if (res) {
-        setUserData(res);
-        navigate("/")
-      } else {
-        setUserData(null);
-        navigate("/login")
-      }
-    })
-  }, [])
+  // useEffect(() => {
+  //   Services.getUser().then(res => {
+  //     if (res) {
+  //       setUserData(res);
+  //       navigate("/")
+  //     } else {
+  //       setUserData(null);
+  //       navigate("/login")
+  //     }
+  //   })
+  // }, [])
   return (
     <>
       {serverUp ? <Routes>
