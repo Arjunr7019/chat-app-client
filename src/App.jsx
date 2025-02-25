@@ -7,32 +7,60 @@ import Chat from './pages/Chat';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import { useNavigate } from "react-router-dom";
+import { baseUrl } from './assets/Endpoints';
+import { ripples } from 'ldrs'
 
 function App() {
-  const{setUserData} = useContext(UserAuthContext);
+  const { setUserData } = useContext(UserAuthContext);
+  const [serverUp, setServerUp] = useState(false);
 
   const navigate = useNavigate();
+  ripples.register()
 
-  useEffect(()=>{
-    Services.getUser().then(res=>{
-      if(res){
+  useEffect(() => {
+    fetch(`${baseUrl}`).then((response) => {
+      if (response.status === 200) {
+        return response.json(); // Parse the JSON only if status is 200
+      } else {
+        throw new Error(`Failed with status: ${response.status}`);
+      }
+    }).then((data) => {
+      setServerUp(true);
+      console.log("serverUp")
+    }).catch(err => {
+      console.log("error:", err);
+      setServerUp(false)
+    })
+  }, [])
+
+  useEffect(() => {
+    Services.getUser().then(res => {
+      if (res) {
         setUserData(res);
         navigate("/")
-      }else{
+      } else {
         setUserData(null);
         navigate("/login")
       }
     })
-  },[])
+  }, [])
   return (
-      <>
-        <Routes>
-          <Route path="/" element={<Chat />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<SignUp />} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
-      </>
+    <>
+      {serverUp ? <Routes>
+        <Route path="/" element={<Chat />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<SignUp />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes> :
+        <div className='h-screen flex justify-center items-center'>
+          <l-ripples
+            size="45"
+            speed="2"
+            color="black"
+          ></l-ripples>
+          <h1>Waiting for Server</h1>
+        </div>}
+    </>
   )
 }
 
