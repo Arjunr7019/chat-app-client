@@ -9,9 +9,10 @@ import Login from './pages/Login';
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from './assets/Endpoints';
 import { ripples } from 'ldrs'
+import { ChatContextProvider } from './context/ChatContext';
 
 function App() {
-  const { setUserData } = useContext(UserAuthContext);
+  const { user } = useContext(UserAuthContext);
   const [serverUp, setServerUp] = useState(false);
 
   // const navigate = useNavigate();
@@ -33,19 +34,9 @@ function App() {
     })
   }, [])
 
-  // useEffect(() => {
-  //   Services.getUser().then(res => {
-  //     if (res) {
-  //       setUserData(res);
-  //       navigate("/")
-  //     } else {
-  //       setUserData(null);
-  //       navigate("/login")
-  //     }
-  //   })
-  // }, [])
+
   return (
-    <>
+    <ChatContextProvider user={user}>
       {serverUp ? <Routes>
         <Route path="/" element={<Chat />} />
         <Route path="/login" element={<Login />} />
@@ -59,8 +50,9 @@ function App() {
             color="black"
           ></l-ripples>
           <h1>Waiting for Server</h1>
-        </div>}
-    </>
+        </div>
+      }
+    </ChatContextProvider>
   )
 }
 
