@@ -6,10 +6,11 @@ import ChatSectionBg from "../images/loginPageBg-image.png";
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { UserAuthContext } from '../context/UserAuth';
-import Services from '../localStorage/Services';
+import { ChatContext } from '../context/ChatContext';
 
 export default function Chat() {
   const{user,setUserData,logoutUser} = useContext(UserAuthContext);
+  const{userChats, isUserChatLoading, userChatsError,userChatsList} = useContext(ChatContext);
 
   return (
     <div className='h-screen flex justify-center items-center flex-row py-2'>
@@ -19,10 +20,9 @@ export default function Chat() {
             <img className='w-10 me-2' src={Logo} alt="logo" />
             <h1 className='text-lg font-medium'>JellyFish</h1>
           </div>
-          <ChatCard name="Rohit" lastMessage="Hi..." />
-          <ChatCard name="Rohit" lastMessage="Hi..." />
-          <ChatCard name="Rohit" lastMessage="Hi..." />
-          <ChatCard name="Rohit" lastMessage="Hi..." />
+          {userChatsList?.map((chatUser)=>
+            <ChatCard name={chatUser.name} key={chatUser.name} lastMessage="Hi..." />
+          )}
         </div>
         <div className='w-full flex flex-row justify-between px-2 pb-2'>
           <div className='flex flex-row'>
