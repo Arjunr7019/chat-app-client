@@ -31,6 +31,7 @@ export const ChatContextProvider = ({ children, user }) => {
   }, [user]);
 
   useEffect(() => {
+    let members = []
     if (user?._id) {
       userChats?.map((e)=> {
         let findOtherUser = e.members.find((cu)=> cu!==user._id)
@@ -43,7 +44,6 @@ export const ChatContextProvider = ({ children, user }) => {
           }
         }).then((data) => {
           // console.log(data)
-          let members = [];
           members.push(data);
           setUserChatsList(members);
         }).catch(err => {

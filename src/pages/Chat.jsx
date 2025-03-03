@@ -12,6 +12,10 @@ export default function Chat() {
   const{user,setUserData,logoutUser} = useContext(UserAuthContext);
   const{userChats, isUserChatLoading, userChatsError,userChatsList} = useContext(ChatContext);
 
+  const list = userChatsList;
+
+  // console.log(userChatsList)
+
   return (
     <div className='h-screen flex justify-center items-center flex-row py-2'>
       <div className='themeCard flex justify-between items-center flex-col h-full m-2 rounded-md' style={{ width: "25%" }}>
@@ -20,7 +24,7 @@ export default function Chat() {
             <img className='w-10 me-2' src={Logo} alt="logo" />
             <h1 className='text-lg font-medium'>JellyFish</h1>
           </div>
-          {userChatsList?.map((chatUser)=>
+          {list?.map((chatUser)=>
             <ChatCard name={chatUser.name} key={chatUser.name} lastMessage="Hi..." />
           )}
         </div>
