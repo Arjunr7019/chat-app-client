@@ -22,7 +22,7 @@ export const ChatContextProvider = ({ children, user }) => {
         }
       }).then((data) => {
         setUserChats(data);
-        data.map((e)=> console.log(e.members))
+        // data.map((e)=> console.log(e.members))
       }).catch(err => {
         console.log("error:", err);
         setUserChatsError(err)
@@ -35,20 +35,23 @@ export const ChatContextProvider = ({ children, user }) => {
     if (user?._id) {
       userChats?.map((e)=> {
         let findOtherUser = e.members.find((cu)=> cu!==user._id)
-        // console.log(findOtherUser);
-        fetch(`${baseUrl}/user/find/${findOtherUser}`).then((response) => {
-          if (response.status === 200) {
-            return response.json(); // Parse the JSON only if status is 200
-          } else {
-            throw new Error(`Failed with status: ${response.status}`);
+        members.push(findOtherUser);
+      })
+      fetch(`${baseUrl}/user`).then((response) => {
+        if (response.status === 200) {
+          return response.json(); // Parse the JSON only if status is 200
+        } else {
+          throw new Error(`Failed with status: ${response.status}`);
+        }
+      }).then((data) => {
+        // console.log(data)
+        data.map((e)=>{
+          if(members.includes(e._id)){
+            setUserChatsList(item=> [...item,e]);
           }
-        }).then((data) => {
-          // console.log(data)
-          members.push(data);
-          setUserChatsList(members);
-        }).catch(err => {
-          console.log("error:", err);
         })
+      }).catch(err => {
+        console.log("error:", err);
       })
     }
   }, [userChats]);
