@@ -10,7 +10,7 @@ import { ChatContext } from '../context/ChatContext';
 
 export default function Chat() {
   const{user,setUserData,logoutUser} = useContext(UserAuthContext);
-  const{userChats, isUserChatLoading, userChatsError,userChatsList} = useContext(ChatContext);
+  const{userChats, isUserChatLoading, userChatsError,userChatsList,getFullChatMessages} = useContext(ChatContext);
 
   const list = userChatsList;
 
@@ -24,8 +24,8 @@ export default function Chat() {
             <img className='w-10 me-2' src={Logo} alt="logo" />
             <h1 className='text-lg font-medium'>JellyFish</h1>
           </div>
-          {list?.map((chatUser)=>
-            <ChatCard name={chatUser.name} key={chatUser.name} lastMessage="Hi..." />
+          {list?.map((chatUser,index)=>
+            <ChatCard onClick={()=>getFullChatMessages(index)} name={chatUser.name} key={chatUser.name} lastMessage="Hi..." />
           )}
         </div>
         <div className='w-full flex flex-row justify-between px-2 pb-2'>

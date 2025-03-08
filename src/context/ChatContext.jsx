@@ -56,8 +56,23 @@ export const ChatContextProvider = ({ children, user }) => {
     }
   }, [userChats]);
 
+  const getFullChatMessages = (index)=>{
+    console.log(userChats[index]._id);
+    fetch(`${baseUrl}/messages/${userChats[index]._id}`).then((response) => {
+      if (response.status === 200) {
+        return response.json(); // Parse the JSON only if status is 200
+      } else {
+        throw new Error(`Failed with status: ${response.status}`);
+      }
+    }).then((data) => {
+      console.log(data[0].text)
+    }).catch(err => {
+      console.log("error:", err);
+    })
+  }
+
   return (
-    <ChatContext.Provider value={{ userChats, isUserChatLoading, userChatsError,userChatsList }}>
+    <ChatContext.Provider value={{ userChats, isUserChatLoading, userChatsError,userChatsList,getFullChatMessages }}>
       {children}
     </ChatContext.Provider>
   )
