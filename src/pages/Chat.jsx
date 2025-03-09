@@ -9,8 +9,8 @@ import { UserAuthContext } from '../context/UserAuth';
 import { ChatContext } from '../context/ChatContext';
 
 export default function Chat() {
-  const{user,setUserData,logoutUser} = useContext(UserAuthContext);
-  const{userChats, isUserChatLoading, userChatsError,userChatsList,getFullChatMessages} = useContext(ChatContext);
+  const { user, setUserData, logoutUser } = useContext(UserAuthContext);
+  const { userChats, isUserChatLoading, userChatsError, userChatsList, getFullChatMessages, activeChatUserChats } = useContext(ChatContext);
 
   const list = userChatsList;
 
@@ -24,8 +24,8 @@ export default function Chat() {
             <img className='w-10 me-2' src={Logo} alt="logo" />
             <h1 className='text-lg font-medium'>JellyFish</h1>
           </div>
-          {list?.map((chatUser,index)=>
-            <ChatCard onClick={()=>getFullChatMessages(index)} name={chatUser.name} key={chatUser.name} lastMessage="Hi..." />
+          {list?.map((chatUser, index) =>
+            <ChatCard onClick={() => getFullChatMessages(index)} name={chatUser.name} key={chatUser.name} lastMessage="Hi..." />
           )}
         </div>
         <div className='w-full flex flex-row justify-between px-2 pb-2'>
@@ -33,16 +33,27 @@ export default function Chat() {
             <img src={Logo} className='w-10 me-2' alt="userIcon" />
             <h1 className='my-auto'>{user?.name}</h1>
           </div>
-          <Button name="Logout" onClick={()=> {logoutUser();setUserData(null)}} />
+          <Button name="Logout" onClick={() => { logoutUser(); setUserData(null) }} />
         </div>
       </div>
 
 
       <div className='themeCard h-full flex flex-col items-center m-2 rounded-md' style={{ width: "75%" }}>
-        <h1 className='text-center text-lg font-medium py-3'>Name</h1>
+        <h1 className='text-center text-lg font-medium py-3'>{activeChatUserChats?.userData.name}</h1>
         <div className='flex justify-center items-center w-full' style={{ height: "80%" }}>
           <div className='themeCard h-full rounded-md flex justify-center items-center' style={{ width: "95%" }}>
-            <img className='m-auto' src={ChatSectionBg} alt="img" />
+            {/* <img className='m-auto' src={ChatSectionBg} alt="img" /> */}
+            <div className='w-full h-full p-3'>
+              {activeChatUserChats?.userChats?.map((chat)=>
+              <div 
+              className={activeChatUserChats?.userData?._id === chat?.senderId ? 
+              'w-full flex flex-row justify-end':'w-full flex flex-row justify-end'}>
+                <p 
+                  className={activeChatUserChats?.userData?._id === chat?.senderId ? 
+                    'themeCard w-fit px-2 py-1 rounded-md rounded-bl-none':'themeCard w-fit px-2 py-1 rounded-md rounded-br-none'}
+                  >{chat.text}</p>
+              </div>)}
+            </div>
           </div>
         </div>
         <div className='flex justify-center items-center flex-row mt-2' style={{ width: "95%" }}>
