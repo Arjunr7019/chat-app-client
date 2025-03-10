@@ -14,7 +14,7 @@ export default function Chat() {
 
   const list = userChatsList;
 
-  // console.log(userChatsList)
+  // console.log(typeof(activeChatUserChats?.userChats))
 
   return (
     <div className='h-screen flex justify-center items-center flex-row py-2'>
@@ -38,21 +38,28 @@ export default function Chat() {
       </div>
 
 
-      <div className='themeCard h-full flex flex-col items-center m-2 rounded-md' style={{ width: "75%" }}>
-        <h1 className='text-center text-lg font-medium py-3'>{activeChatUserChats?.userData.name}</h1>
+      {activeChatUserChats ? <div className='themeCard h-full flex flex-col items-center m-2 rounded-md' style={{ width: "75%" }}>
+        <h1 className='text-center text-lg font-medium py-3'>{activeChatUserChats?.userData?.name}</h1>
         <div className='flex justify-center items-center w-full' style={{ height: "80%" }}>
           <div className='themeCard h-full rounded-md flex justify-center items-center' style={{ width: "95%" }}>
             {/* <img className='m-auto' src={ChatSectionBg} alt="img" /> */}
             <div className='w-full h-full p-3'>
-              {activeChatUserChats?.userChats?.map((chat)=>
-              <div 
-              className={activeChatUserChats?.userData?._id === chat?.senderId ? 
-              'w-full flex flex-row justify-end':'w-full flex flex-row justify-end'}>
-                <p 
-                  className={activeChatUserChats?.userData?._id === chat?.senderId ? 
-                    'themeCard w-fit px-2 py-1 rounded-md rounded-bl-none':'themeCard w-fit px-2 py-1 rounded-md rounded-br-none'}
+              {activeChatUserChats?.userChats?.map((chat, index) =>
+                <div key={index}
+                  className={activeChatUserChats?.userData?._id === chat?.senderId ?
+                    'w-full flex flex-row justify-end' : 'w-full flex flex-row justify-end'}>
+                  <p
+                    className={activeChatUserChats?.userData?._id === chat?.senderId ?
+                      'themeCard w-fit px-2 py-1 rounded-md rounded-bl-none' : 'themeCard w-fit px-2 py-1 rounded-md rounded-br-none'}
                   >{chat.text}</p>
-              </div>)}
+                </div>)
+              }
+              {(Array.isArray(activeChatUserChats?.userChats) && activeChatUserChats?.userChats.length === 0) ?
+                <div className='w-full h-full flex justify-center items-center'>
+                  <p className='text-center'>Chat Session is Empty <br /> Start Conversation</p>
+                </div>
+                : <></>
+              }
             </div>
           </div>
         </div>
@@ -60,7 +67,11 @@ export default function Chat() {
           <Input name="Message" type="Text" />
           <Button name="Send" />
         </div>
-      </div>
+      </div> :
+        <div className='themeCard h-full flex flex-col justify-center items-center m-2 rounded-md' style={{ width: "75%" }}>
+          <img src={ChatSectionBg} alt="img" />
+          <h1>Welcome to JellyFish Chat App</h1>
+        </div>}
     </div>
   )
 }

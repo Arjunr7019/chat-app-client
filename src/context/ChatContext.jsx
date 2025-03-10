@@ -58,7 +58,7 @@ export const ChatContextProvider = ({ children, user }) => {
   }, [userChats]);
 
   const getFullChatMessages = (index) => {
-    console.log(userChats[index]._id);
+    // console.log(userChats[index]._id);
     setActiveChatUserChats(val=>{return{...val,userData:userChatsList[index]}})
     fetch(`${baseUrl}/messages/${userChats[index]._id}`).then((response) => {
       if (response.status === 200) {
@@ -68,7 +68,7 @@ export const ChatContextProvider = ({ children, user }) => {
       }
     }).then((data) => {
       setActiveChatUserChats(val=> {return{...val,userChats:data}})
-      console.log(data)
+      // console.log(data)
     }).catch(err => {
       console.log("error:", err);
     })
