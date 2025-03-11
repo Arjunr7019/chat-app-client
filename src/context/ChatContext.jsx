@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { baseUrl } from "../assets/Endpoints";
+import Services from "../localStorage/Services";
 
 export const ChatContext = createContext(null);
 
@@ -10,6 +11,7 @@ export const ChatContextProvider = ({ children, user }) => {
   const [userChatsList, setUserChatsList] = useState([]);
   const [activeChatUserChats, setActiveChatUserChats] = useState();
 
+  //total active chat users list
   useEffect(() => {
     if (user?._id) {
       setIsUserChatLoading(true);
@@ -31,6 +33,7 @@ export const ChatContextProvider = ({ children, user }) => {
     }
   }, [user]);
 
+  //getting active chat users data
   useEffect(() => {
     let members = []
     if (user?._id) {
@@ -57,9 +60,10 @@ export const ChatContextProvider = ({ children, user }) => {
     }
   }, [userChats]);
 
+  //getting full chats of particular user
   const getFullChatMessages = (index) => {
     // console.log(userChats[index]._id);
-    setActiveChatUserChats(val=>{return{...val,userData:userChatsList[index]}})
+    setActiveChatUserChats(val => { return { ...val, userData: userChatsList[index] } })
     fetch(`${baseUrl}/messages/${userChats[index]._id}`).then((response) => {
       if (response.status === 200) {
         return response.json(); // Parse the JSON only if status is 200
@@ -67,15 +71,46 @@ export const ChatContextProvider = ({ children, user }) => {
         throw new Error(`Failed with status: ${response.status}`);
       }
     }).then((data) => {
-      setActiveChatUserChats(val=> {return{...val,userChats:data}})
+      setActiveChatUserChats(val => { return { ...val, userChats: data } })
       // console.log(data)
     }).catch(err => {
       console.log("error:", err);
     })
+    setActiveChatUserChats(val => { return { ...val, chatId: userChats[index]._id } })
+  }
+
+  const sendMessage = (text) => {
+    // console.log("chatId",activeChatUserChats.chatId);
+    let senderId;
+    Services.getUser().then(res => senderId = res)
+    // console.log("text",text)
+    if (text) {
+      fetch(`${baseUrl}/messages`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chatId: activeChatUserChats.chatId,
+          senderId,
+          text
+        }),
+      }).then((response) => {
+        if (response.status === 200) {
+          return response.json(); // Parse the JSON only if status is 200
+        } else {
+          throw new Error(`Failed with status: ${response.status}`);
+        }
+      }).then((data) => {
+        console.log(data)
+      }).catch(err => {
+        console.log("error:", err);
+      })
+    }
   }
 
   return (
-    <ChatContext.Provider value={{ userChats, isUserChatLoading, userChatsError, userChatsList, getFullChatMessages,activeChatUserChats }}>
+    <ChatContext.Provider value={{ userChats, isUserChatLoading, userChatsError, userChatsList, getFullChatMessages, activeChatUserChats, sendMessage }}>
       {children}
     </ChatContext.Provider>
   )

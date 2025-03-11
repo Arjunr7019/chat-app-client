@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import '../App.css';
 import Logo from "../images/chatAppLogo.png";
 import ChatCard from '../components/ChatCard';
@@ -10,7 +10,8 @@ import { ChatContext } from '../context/ChatContext';
 
 export default function Chat() {
   const { user, setUserData, logoutUser } = useContext(UserAuthContext);
-  const { userChats, isUserChatLoading, userChatsError, userChatsList, getFullChatMessages, activeChatUserChats } = useContext(ChatContext);
+  const { userChats, isUserChatLoading, userChatsError, userChatsList, getFullChatMessages, activeChatUserChats,sendMessage } = useContext(ChatContext);
+  const[textMessage,setTextMessage] = useState();
 
   const list = userChatsList;
 
@@ -64,8 +65,8 @@ export default function Chat() {
           </div>
         </div>
         <div className='flex justify-center items-center flex-row mt-2' style={{ width: "95%" }}>
-          <Input name="Message" type="Text" />
-          <Button name="Send" />
+          <Input value={textMessage} onChange={(e)=> setTextMessage(e.target.value)} name="Message" type="Text" />
+          <Button onClick={()=> sendMessage(textMessage)} name="Send" />
         </div>
       </div> :
         <div className='themeCard h-full flex flex-col justify-center items-center m-2 rounded-md' style={{ width: "75%" }}>
