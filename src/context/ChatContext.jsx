@@ -102,7 +102,9 @@ export const ChatContextProvider = ({ children, user }) => {
           throw new Error(`Failed with status: ${response.status}`);
         }
       }).then((data) => {
-        console.log(data)
+        // chats.push(data)
+        setActiveChatUserChats((val)=> ({...val,userChats:[...val.userChats,data]}))
+        console.log("response",data)
       }).catch(err => {
         console.log("error:", err);
       })

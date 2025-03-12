@@ -51,7 +51,7 @@ export default function Chat() {
                     'w-full flex flex-row justify-end' : 'w-full flex flex-row justify-end'}>
                   <p
                     className={activeChatUserChats?.userData?._id === chat?.senderId ?
-                      'themeCard w-fit px-2 py-1 rounded-md rounded-bl-none' : 'themeCard w-fit px-2 py-1 rounded-md rounded-br-none'}
+                      'themeCard w-fit px-2 py-1 rounded-md rounded-bl-none mb-2' : 'themeCard w-fit px-2 py-1 rounded-md rounded-br-none mb-2'}
                   >{chat.text}</p>
                 </div>)
               }
