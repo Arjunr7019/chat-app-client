@@ -15,7 +15,18 @@ export default function Chat() {
 
   const list = userChatsList;
 
-  // console.log(typeof(activeChatUserChats?.userChats))
+  // console.log(activeChatUserChats?.userChats[0].createdAt)
+
+  const convertToIST = (timestamp) => {
+    const date = new Date(timestamp);
+
+    return date.toLocaleTimeString("en-IN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+      timeZone: "Asia/Kolkata", // IST timezone
+    });
+  };
 
   return (
     <div className='h-screen flex justify-center items-center flex-row py-2'>
@@ -48,11 +59,12 @@ export default function Chat() {
               {activeChatUserChats?.userChats?.map((chat, index) =>
                 <div key={index}
                   className={activeChatUserChats?.userData?._id === chat?.senderId ?
-                    'w-full flex flex-row justify-end' : 'w-full flex flex-row justify-end'}>
+                    'w-full flex flex-row justify-start items-end' : 'w-full flex flex-row justify-end items-end'}>
                   <p
                     className={activeChatUserChats?.userData?._id === chat?.senderId ?
                       'themeCard w-fit px-2 py-1 rounded-md rounded-bl-none mb-2' : 'themeCard w-fit px-2 py-1 rounded-md rounded-br-none mb-2'}
                   >{chat.text}</p>
+                  <p className='ps-1 pb-2 m-0' style={{fontSize:"9px"}}>{convertToIST(chat.createdAt)}</p>
                 </div>)
               }
               {(Array.isArray(activeChatUserChats?.userChats) && activeChatUserChats?.userChats.length === 0) ?
