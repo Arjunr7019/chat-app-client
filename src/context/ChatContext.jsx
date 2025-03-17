@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import { baseUrl } from "../assets/Endpoints";
 import Services from "../localStorage/Services";
+import { io } from "socket.io-client"
 
 export const ChatContext = createContext(null);
 
@@ -10,7 +11,23 @@ export const ChatContextProvider = ({ children, user }) => {
   const [userChatsError, setUserChatsError] = useState(null);
   const [userChatsList, setUserChatsList] = useState([]);
   const [activeChatUserChats, setActiveChatUserChats] = useState();
+  const [socket,setSocket] = useState(null);
 
+
+  useEffect(()=>{
+    const newSocket = io(`${baseUrl}`);
+    setSocket(newSocket);
+    console.log(newSocket)
+
+    return()=>{
+      newSocket.disconnect();
+    }
+  },[user])
+
+  useEffect(()=>{
+    if(socket === null) return
+    socket.emit("addNewUser",user?._id);
+  },[socket]);
   //total active chat users list
   useEffect(() => {
     if (user?._id) {
