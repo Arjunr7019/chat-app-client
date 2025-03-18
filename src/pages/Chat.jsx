@@ -37,7 +37,7 @@ export default function Chat() {
             <h1 className='text-lg font-medium'>JellyFish</h1>
           </div>
           {list?.map((chatUser, index) =>
-            <ChatCard onClick={() => getFullChatMessages(index)} name={chatUser.name} key={chatUser.name} lastMessage="Hi..." />
+            <ChatCard onClick={() => getFullChatMessages(index)} userId={chatUser._id} name={chatUser.name} key={chatUser.name} lastMessage="Hi..." />
           )}
         </div>
         <div className='w-full flex flex-row justify-between px-2 pb-2'>

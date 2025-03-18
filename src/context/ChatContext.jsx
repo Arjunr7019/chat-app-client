@@ -11,23 +11,29 @@ export const ChatContextProvider = ({ children, user }) => {
   const [userChatsError, setUserChatsError] = useState(null);
   const [userChatsList, setUserChatsList] = useState([]);
   const [activeChatUserChats, setActiveChatUserChats] = useState();
-  const [socket,setSocket] = useState(null);
+  const [socket, setSocket] = useState(null);
+  const [onlineUsers, setOnlineUsers] = useState([]);
 
 
-  useEffect(()=>{
+  useEffect(() => {
     const newSocket = io(`${baseUrl}`);
     setSocket(newSocket);
-    console.log(newSocket)
+    // console.log(newSocket)
 
-    return()=>{
+    return () => {
       newSocket.disconnect();
     }
-  },[user])
+  }, [user])
 
-  useEffect(()=>{
-    if(socket === null) return
-    socket.emit("addNewUser",user?._id);
-  },[socket]);
+  useEffect(() => {
+    if (socket === null) return
+    socket.emit("addNewUser", user?._id);
+    socket.on("getOnlineUsers", (res) => {
+      setOnlineUsers(res);
+    })
+  }, [socket]);
+  // console.log("onlineUsers",onlineUsers)
+
   //total active chat users list
   useEffect(() => {
     if (user?._id) {
@@ -120,8 +126,8 @@ export const ChatContextProvider = ({ children, user }) => {
         }
       }).then((data) => {
         // chats.push(data)
-        setActiveChatUserChats((val)=> ({...val,userChats:[...val.userChats,data]}))
-        console.log("response",data)
+        setActiveChatUserChats((val) => ({ ...val, userChats: [...val.userChats, data] }))
+        console.log("response", data)
       }).catch(err => {
         console.log("error:", err);
       })
@@ -129,7 +135,16 @@ export const ChatContextProvider = ({ children, user }) => {
   }
 
   return (
-    <ChatContext.Provider value={{ userChats, isUserChatLoading, userChatsError, userChatsList, getFullChatMessages, activeChatUserChats, sendMessage }}>
+    <ChatContext.Provider value={{
+      userChats,
+      isUserChatLoading,
+      userChatsError,
+      userChatsList,
+      getFullChatMessages,
+      activeChatUserChats,
+      sendMessage,
+      onlineUsers
+    }}>
       {children}
     </ChatContext.Provider>
   )
