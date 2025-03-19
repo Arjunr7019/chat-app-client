@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { baseUrl } from "../assets/Endpoints";
+import { webSoketUrl } from "../assets/Endpoints";
 import Services from "../localStorage/Services";
 import { io } from "socket.io-client"
 
@@ -16,7 +17,7 @@ export const ChatContextProvider = ({ children, user }) => {
 
 
   useEffect(() => {
-    const newSocket = io(`${baseUrl}`);
+    const newSocket = io(`${webSoketUrl}`);
     setSocket(newSocket);
     // console.log(newSocket)
 
