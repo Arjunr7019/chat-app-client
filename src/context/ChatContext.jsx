@@ -14,10 +14,13 @@ export const ChatContextProvider = ({ children, user }) => {
   const [activeChatUserChats, setActiveChatUserChats] = useState();
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const [newMessage,setNewMessage] = useState(null);
 
+  // console.log(userChats)
 
   useEffect(() => {
-    const newSocket = io(`${webSoketUrl}`);
+    // const newSocket = io(`${webSoketUrl}`);
+    const newSocket = io(`http://localhost:5000`);
     setSocket(newSocket);
     // console.log(newSocket)
 
@@ -32,8 +35,36 @@ export const ChatContextProvider = ({ children, user }) => {
     socket.on("getOnlineUsers", (res) => {
       setOnlineUsers(res);
     })
+
+    return ()=>{
+      socket.off("getOnlineUsers")
+    }
   }, [socket]);
   // console.log("onlineUsers",onlineUsers)
+
+  console.log(activeChatUserChats?.chatId)
+
+  // send message
+  useEffect(() => {
+    if (socket === null) return
+    const recipientId = activeChatUserChats?.userData?._id;
+    
+    socket.emit("sendMessage",{...newMessage, recipientId});
+  }, [newMessage]);
+
+  useEffect(()=>{
+    if (socket === null) return
+
+    socket.emit("getMessage",res=>{
+      if(activeChatUserChats?.chatId !== res.chatId) return
+
+      setActiveChatUserChats((val) => ({ ...val, userChats: [...val.userChats, res] }))
+    });
+
+    return()=>{
+      socket.off("getMessage");
+    }
+  },[socket,activeChatUserChats])
 
   //total active chat users list
   useEffect(() => {
@@ -86,7 +117,7 @@ export const ChatContextProvider = ({ children, user }) => {
 
   //getting full chats of particular user
   const getFullChatMessages = (index) => {
-    // console.log(userChats[index]._id);
+    // console.log("getFullChatMessages",userChats[index]._id);
     setActiveChatUserChats(val => { return { ...val, userData: userChatsList[index] } })
     fetch(`${baseUrl}/messages/${userChats[index]._id}`).then((response) => {
       if (response.status === 200) {
@@ -128,6 +159,7 @@ export const ChatContextProvider = ({ children, user }) => {
       }).then((data) => {
         // chats.push(data)
         setActiveChatUserChats((val) => ({ ...val, userChats: [...val.userChats, data] }))
+        setNewMessage(data)
         console.log("response", data)
       }).catch(err => {
         console.log("error:", err);
