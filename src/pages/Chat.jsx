@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import '../App.css';
 import Logo from "../images/chatAppLogo.png";
 import ChatCard from '../components/ChatCard';
@@ -10,12 +10,25 @@ import { ChatContext } from '../context/ChatContext';
 
 export default function Chat() {
   const { user, setUserData, logoutUser } = useContext(UserAuthContext);
-  const { userChats, isUserChatLoading, userChatsError, userChatsList, getFullChatMessages, activeChatUserChats,sendMessage } = useContext(ChatContext);
-  const[textMessage,setTextMessage] = useState();
+  const { userChats,
+    isUserChatLoading,
+    userChatsError,
+    userChatsList,
+    getFullChatMessages,
+    activeChatUserChats,
+    sendMessage,
+    newMessage } = useContext(ChatContext);
+  const [textMessage, setTextMessage] = useState();
 
   const list = userChatsList;
 
   // console.log(activeChatUserChats?.userChats[0].createdAt)
+  useEffect(()=>{
+    // console.log(newMessage)
+    if(newMessage){
+      setTextMessage("");
+    }
+  },[newMessage])
 
   const convertToIST = (timestamp) => {
     const date = new Date(timestamp);
@@ -55,7 +68,7 @@ export default function Chat() {
         <div className='flex justify-center items-center w-full' style={{ height: "80%" }}>
           <div className='themeCard h-full rounded-md flex justify-center items-center' style={{ width: "95%" }}>
             {/* <img className='m-auto' src={ChatSectionBg} alt="img" /> */}
-            <div className='w-full h-full p-3'>
+            <div style={{overflowY:"scroll"}} className='w-full h-full p-3'>
               {activeChatUserChats?.userChats?.map((chat, index) =>
                 <div key={index}
                   className={activeChatUserChats?.userData?._id === chat?.senderId ?
@@ -64,7 +77,7 @@ export default function Chat() {
                     className={activeChatUserChats?.userData?._id === chat?.senderId ?
                       'themeCard w-fit px-2 py-1 rounded-md rounded-bl-none mb-2' : 'themeCard w-fit px-2 py-1 rounded-md rounded-br-none mb-2'}
                   >{chat.text}</p>
-                  <p className='ps-1 pb-2 m-0' style={{fontSize:"9px"}}>{convertToIST(chat.createdAt)}</p>
+                  <p className='ps-1 pb-2 m-0' style={{ fontSize: "9px" }}>{convertToIST(chat.createdAt)}</p>
                 </div>)
               }
               {(Array.isArray(activeChatUserChats?.userChats) && activeChatUserChats?.userChats.length === 0) ?
@@ -77,8 +90,8 @@ export default function Chat() {
           </div>
         </div>
         <div className='flex justify-center items-center flex-row mt-2' style={{ width: "95%" }}>
-          <Input value={textMessage} onChange={(e)=> setTextMessage(e.target.value)} name="Message" type="Text" />
-          <Button onClick={()=> sendMessage(textMessage)} name="Send" />
+          <Input value={textMessage} onChange={(e) => setTextMessage(e.target.value)} name="Message" type="Text" />
+          <Button onClick={() => sendMessage(textMessage)} name="Send" />
         </div>
       </div> :
         <div className='themeCard h-full flex flex-col justify-center items-center m-2 rounded-md' style={{ width: "75%" }}>

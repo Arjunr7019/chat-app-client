@@ -16,11 +16,13 @@ export const ChatContextProvider = ({ children, user }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [newMessage,setNewMessage] = useState(null);
 
+  let senderId;
+  Services.getUser().then(res => senderId = res)
+
   // console.log(userChats)
 
   useEffect(() => {
-    // const newSocket = io(`${webSoketUrl}`);
-    const newSocket = io(`http://localhost:5000`);
+    const newSocket = io(`${webSoketUrl}`);
     setSocket(newSocket);
     // console.log(newSocket)
 
@@ -42,7 +44,7 @@ export const ChatContextProvider = ({ children, user }) => {
   }, [socket]);
   // console.log("onlineUsers",onlineUsers)
 
-  console.log(activeChatUserChats?.chatId)
+  // console.log(activeChatUserChats?.chatId)
 
   // send message
   useEffect(() => {
@@ -55,7 +57,9 @@ export const ChatContextProvider = ({ children, user }) => {
   useEffect(()=>{
     if (socket === null) return
 
-    socket.emit("getMessage",res=>{
+    socket.on("getMessage",res=>{
+      // console.log("activeChatUserChats", activeChatUserChats?.chatId)
+      // console.log("response", res.chatId)
       if(activeChatUserChats?.chatId !== res.chatId) return
 
       setActiveChatUserChats((val) => ({ ...val, userChats: [...val.userChats, res] }))
@@ -136,8 +140,7 @@ export const ChatContextProvider = ({ children, user }) => {
 
   const sendMessage = (text) => {
     // console.log("chatId",activeChatUserChats.chatId);
-    let senderId;
-    Services.getUser().then(res => senderId = res)
+    
     // console.log("text",text)
     if (text) {
       fetch(`${baseUrl}/messages`, {
@@ -160,7 +163,7 @@ export const ChatContextProvider = ({ children, user }) => {
         // chats.push(data)
         setActiveChatUserChats((val) => ({ ...val, userChats: [...val.userChats, data] }))
         setNewMessage(data)
-        console.log("response", data)
+        // console.log("response", data)
       }).catch(err => {
         console.log("error:", err);
       })
@@ -176,7 +179,8 @@ export const ChatContextProvider = ({ children, user }) => {
       getFullChatMessages,
       activeChatUserChats,
       sendMessage,
-      onlineUsers
+      onlineUsers,
+      newMessage
     }}>
       {children}
     </ChatContext.Provider>
