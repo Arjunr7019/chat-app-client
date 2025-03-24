@@ -19,16 +19,17 @@ export default function Chat() {
     sendMessage,
     newMessage } = useContext(ChatContext);
   const [textMessage, setTextMessage] = useState();
+  const [findNewUser, setFindNewUser] = useState(false);
 
   const list = userChatsList;
 
   // console.log(activeChatUserChats?.userChats[0].createdAt)
-  useEffect(()=>{
+  useEffect(() => {
     // console.log(newMessage)
-    if(newMessage){
+    if (newMessage) {
       setTextMessage("");
     }
-  },[newMessage])
+  }, [newMessage])
 
   const convertToIST = (timestamp) => {
     const date = new Date(timestamp);
@@ -49,9 +50,24 @@ export default function Chat() {
             <img className='w-10 me-2' src={Logo} alt="logo" />
             <h1 className='text-lg font-medium'>JellyFish</h1>
           </div>
-          {list?.map((chatUser, index) =>
-            <ChatCard onClick={() => getFullChatMessages(index)} userId={chatUser._id} name={chatUser.name} key={chatUser.name} lastMessage="Hi..." />
-          )}
+          {findNewUser ? <div className='w-full flex flex-col items-center'>
+            <div className='w-4/5 flex justify-center pb-2'>
+              <Button extraClassNames="w-full m-0" name="Back To Chats" onClick={() => findNewUser ? setFindNewUser(false) : setFindNewUser(true)} />
+            </div>
+            <div className='w-4/5 flex justify-center pb-2'>
+              <input className='inputForm w-4/5 rounded-md p-2' placeholder='Find New Friend' type="text" />
+              <Button name="Find" />
+            </div>
+            {/* for find new friend response section */}
+          </div> :
+          <div className='w-full flex flex-col items-center'>
+            <div className='w-4/5 flex justify-center pb-2'>
+              <Button extraClassNames="w-full m-0" name="Add New User" onClick={() => findNewUser ? setFindNewUser(false) : setFindNewUser(true)} />
+            </div>
+            {list?.map((chatUser, index) =>
+              <ChatCard onClick={() => getFullChatMessages(index)} userId={chatUser._id} name={chatUser.name} key={chatUser.name} lastMessage="Hi..." />
+            )}
+          </div>}
         </div>
         <div className='w-full flex flex-row justify-between px-2 pb-2'>
           <div className='flex flex-row'>
@@ -68,7 +84,7 @@ export default function Chat() {
         <div className='flex justify-center items-center w-full' style={{ height: "80%" }}>
           <div className='themeCard h-full rounded-md flex justify-center items-center' style={{ width: "95%" }}>
             {/* <img className='m-auto' src={ChatSectionBg} alt="img" /> */}
-            <div style={{overflowY:"scroll"}} className='w-full h-full p-3'>
+            <div style={{ overflowY: "scroll" }} className='w-full h-full p-3'>
               {activeChatUserChats?.userChats?.map((chat, index) =>
                 <div key={index}
                   className={activeChatUserChats?.userData?._id === chat?.senderId ?
