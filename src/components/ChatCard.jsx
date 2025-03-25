@@ -2,12 +2,13 @@ import React, { useContext } from 'react';
 import Logo from '../images/chatAppLogo.png';
 import { ChatContext } from '../context/ChatContext';
 
-export default function ChatCard({name ,lastMessage,onClick,userId}) {
+export default function ChatCard({name ,lastMessage,onClick,userId,extraClassNames}) {
     const{onlineUsers} = useContext(ChatContext);
 
     console.log(onlineUsers?.some((user)=> user?.userId === userId) ? `${name}: online` : ``);
     return (
-        <div onClick={onClick} className='themeCard flex flex-row items-center w-4/5 rounded-md py-2 px-1.5 mb-2 cursor-pointer relative'>
+        <div onClick={onClick} 
+        className={`themeCard flex flex-row items-center w-4/5 rounded-md py-2 px-1.5 cursor-pointer relative ${extraClassNames}`}>
             <div className='themeCard w-fit rounded-full me-2'>
                 <img className='w-10' src={Logo} alt="userIcon" />
             </div>

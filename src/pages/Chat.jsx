@@ -17,8 +17,11 @@ export default function Chat() {
     getFullChatMessages,
     activeChatUserChats,
     sendMessage,
-    newMessage } = useContext(ChatContext);
+    newMessage,
+    findFriend,
+    getNewFriend } = useContext(ChatContext);
   const [textMessage, setTextMessage] = useState();
+  const [email, setEmail] = useState();
   const [findNewUser, setFindNewUser] = useState(false);
 
   const list = userChatsList;
@@ -55,19 +58,24 @@ export default function Chat() {
               <Button extraClassNames="w-full m-0" name="Back To Chats" onClick={() => findNewUser ? setFindNewUser(false) : setFindNewUser(true)} />
             </div>
             <div className='w-4/5 flex justify-center pb-2'>
-              <input className='inputForm w-4/5 rounded-md p-2' placeholder='Find New Friend' type="text" />
-              <Button name="Find" />
+              <input value={email} onChange={(e) => setEmail(e.target.value)} className='inputForm w-4/5 rounded-md p-2' placeholder='Find New Friend' type="text" />
+              <Button extraClassNames="ms-2" name="Find" onClick={() => getNewFriend(email)} />
+            </div>
+            <div className='w-4/5 flex flex-row items-center justify-center'>
+              <ChatCard userId={findFriend?._id} name={findFriend?.name} key={findFriend?._id} />
+              <Button extraClassNames="ms-2" name="Add" />
             </div>
             {/* for find new friend response section */}
           </div> :
-          <div className='w-full flex flex-col items-center'>
-            <div className='w-4/5 flex justify-center pb-2'>
-              <Button extraClassNames="w-full m-0" name="Add New User" onClick={() => findNewUser ? setFindNewUser(false) : setFindNewUser(true)} />
-            </div>
-            {list?.map((chatUser, index) =>
-              <ChatCard onClick={() => getFullChatMessages(index)} userId={chatUser._id} name={chatUser.name} key={chatUser.name} lastMessage="Hi..." />
-            )}
-          </div>}
+            <div className='w-full flex flex-col items-center'>
+              <div className='w-4/5 flex justify-center pb-2'>
+                <Button extraClassNames="w-full m-0" name="Add New User" onClick={() => findNewUser ? setFindNewUser(false) : setFindNewUser(true)} />
+              </div>
+              {list?.map((chatUser, index) =>
+                <ChatCard onClick={() => getFullChatMessages(index)} 
+                userId={chatUser._id} name={chatUser.name} key={chatUser._id} lastMessage="Hi..." extraClassNames="mb-2" />
+              )}
+            </div>}
         </div>
         <div className='w-full flex flex-row justify-between px-2 pb-2'>
           <div className='flex flex-row'>
@@ -107,7 +115,7 @@ export default function Chat() {
         </div>
         <div className='flex justify-center items-center flex-row mt-2' style={{ width: "95%" }}>
           <Input value={textMessage} onChange={(e) => setTextMessage(e.target.value)} name="Message" type="Text" />
-          <Button onClick={() => sendMessage(textMessage)} name="Send" />
+          <Button extraClassNames="ms-2" onClick={() => sendMessage(textMessage)} name="Send" />
         </div>
       </div> :
         <div className='themeCard h-full flex flex-col justify-center items-center m-2 rounded-md' style={{ width: "75%" }}>

@@ -14,7 +14,8 @@ export const ChatContextProvider = ({ children, user }) => {
   const [activeChatUserChats, setActiveChatUserChats] = useState();
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const [newMessage,setNewMessage] = useState(null);
+  const [newMessage, setNewMessage] = useState(null);
+  const [findFriend, setFindFriend] = useState()
 
   let senderId;
   Services.getUser().then(res => senderId = res)
@@ -38,7 +39,7 @@ export const ChatContextProvider = ({ children, user }) => {
       setOnlineUsers(res);
     })
 
-    return ()=>{
+    return () => {
       socket.off("getOnlineUsers")
     }
   }, [socket]);
@@ -50,25 +51,25 @@ export const ChatContextProvider = ({ children, user }) => {
   useEffect(() => {
     if (socket === null) return
     const recipientId = activeChatUserChats?.userData?._id;
-    
-    socket.emit("sendMessage",{...newMessage, recipientId});
+
+    socket.emit("sendMessage", { ...newMessage, recipientId });
   }, [newMessage]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (socket === null) return
 
-    socket.on("getMessage",res=>{
+    socket.on("getMessage", res => {
       // console.log("activeChatUserChats", activeChatUserChats?.chatId)
       // console.log("response", res.chatId)
-      if(activeChatUserChats?.chatId !== res.chatId) return
+      if (activeChatUserChats?.chatId !== res.chatId) return
 
       setActiveChatUserChats((val) => ({ ...val, userChats: [...val.userChats, res] }))
     });
 
-    return()=>{
+    return () => {
       socket.off("getMessage");
     }
-  },[socket,activeChatUserChats])
+  }, [socket, activeChatUserChats])
 
   //total active chat users list
   useEffect(() => {
@@ -140,7 +141,7 @@ export const ChatContextProvider = ({ children, user }) => {
 
   const sendMessage = (text) => {
     // console.log("chatId",activeChatUserChats.chatId);
-    
+
     // console.log("text",text)
     if (text) {
       fetch(`${baseUrl}/messages`, {
@@ -170,6 +171,22 @@ export const ChatContextProvider = ({ children, user }) => {
     }
   }
 
+  const getNewFriend = (email) => {
+    fetch(`${baseUrl}/user/findfriend/${email}`).then((response) => {
+      if (response.status === 200) {
+        return response.json(); // Parse the JSON only if status is 200
+      } else {
+        throw new Error(`Failed with status: ${response.status}`);
+      }
+    }).then((data) => {
+      setFindFriend(data)
+      // console.log(data)
+    }).catch(err => {
+      console.log("error:", err);
+      setFindFriend(err)
+    })
+  }
+
   return (
     <ChatContext.Provider value={{
       userChats,
@@ -180,7 +197,9 @@ export const ChatContextProvider = ({ children, user }) => {
       activeChatUserChats,
       sendMessage,
       onlineUsers,
-      newMessage
+      newMessage,
+      findFriend,
+      getNewFriend
     }}>
       {children}
     </ChatContext.Provider>
