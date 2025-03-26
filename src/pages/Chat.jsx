@@ -19,7 +19,8 @@ export default function Chat() {
     sendMessage,
     newMessage,
     findFriend,
-    getNewFriend } = useContext(ChatContext);
+    getNewFriend,
+    createNewChat } = useContext(ChatContext);
   const [textMessage, setTextMessage] = useState();
   const [email, setEmail] = useState();
   const [findNewUser, setFindNewUser] = useState(false);
@@ -61,10 +62,10 @@ export default function Chat() {
               <input value={email} onChange={(e) => setEmail(e.target.value)} className='inputForm w-4/5 rounded-md p-2' placeholder='Find New Friend' type="text" />
               <Button extraClassNames="ms-2" name="Find" onClick={() => getNewFriend(email)} />
             </div>
-            <div className='w-4/5 flex flex-row items-center justify-center'>
+            {findFriend ? <div className='w-4/5 flex flex-row items-center justify-center'>
               <ChatCard userId={findFriend?._id} name={findFriend?.name} key={findFriend?._id} />
-              <Button extraClassNames="ms-2" name="Add" />
-            </div>
+              <Button extraClassNames="ms-2" name="Add" onClick={()=> createNewChat()} />
+            </div>:<p className='text-gray-500'>Search Friend by Email</p>}
             {/* for find new friend response section */}
           </div> :
             <div className='w-full flex flex-col items-center'>

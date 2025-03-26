@@ -15,10 +15,10 @@ export const ChatContextProvider = ({ children, user }) => {
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [newMessage, setNewMessage] = useState(null);
-  const [findFriend, setFindFriend] = useState()
+  const [findFriend, setFindFriend] = useState(null)
 
   let senderId;
-  Services.getUser().then(res => senderId = res)
+  Services.getUser().then(res => senderId = res._id)
 
   // console.log(userChats)
 
@@ -180,13 +180,40 @@ export const ChatContextProvider = ({ children, user }) => {
       }
     }).then((data) => {
       setFindFriend(data)
-      // console.log(data)
+      console.log(data)
     }).catch(err => {
       console.log("error:", err);
       setFindFriend(err)
     })
   }
 
+  const createNewChat = ()=>{
+    const firstId = senderId;
+    const secondId = findFriend?._id
+    if(secondId){
+      fetch(`${baseUrl}/chats`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstId,
+          secondId
+        }),
+      }).then((response) => {
+        if (response.status === 200) {
+          return response.json(); // Parse the JSON only if status is 200
+        } else {
+          throw new Error(`Failed with status: ${response.status}`);
+        }
+      }).then((data) => {
+        console.log("response", data)
+        // setUserChats(prevArray => [...prevArray, data]);
+      }).catch(err => {
+        console.log("error:", err);
+      })
+    }
+  }
   return (
     <ChatContext.Provider value={{
       userChats,
@@ -199,7 +226,8 @@ export const ChatContextProvider = ({ children, user }) => {
       onlineUsers,
       newMessage,
       findFriend,
-      getNewFriend
+      getNewFriend,
+      createNewChat
     }}>
       {children}
     </ChatContext.Provider>
