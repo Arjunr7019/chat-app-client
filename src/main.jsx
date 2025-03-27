@@ -8,7 +8,7 @@ import { UserAuthProvider } from './context/UserAuth'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/chat-app-client">
       <UserAuthProvider>
         <App />
       </UserAuthProvider>

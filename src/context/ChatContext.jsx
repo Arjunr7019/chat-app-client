@@ -18,7 +18,7 @@ export const ChatContextProvider = ({ children, user }) => {
   const [findFriend, setFindFriend] = useState(null)
 
   let senderId;
-  Services.getUser().then(res => senderId = res._id)
+  Services.getUser().then(res => senderId = res?._id)
 
   // console.log(userChats)
 
@@ -79,7 +79,7 @@ export const ChatContextProvider = ({ children, user }) => {
       fetch(`${baseUrl}/chats/${user?._id}`).then((response) => {
         if (response.status === 200) {
           setIsUserChatLoading(false);
-          return response.json(); // Parse the JSON only if status is 200
+          return response.json();
         } else {
           throw new Error(`Failed with status: ${response.status}`);
         }
@@ -103,7 +103,7 @@ export const ChatContextProvider = ({ children, user }) => {
       })
       fetch(`${baseUrl}/user`).then((response) => {
         if (response.status === 200) {
-          return response.json(); // Parse the JSON only if status is 200
+          return response.json();
         } else {
           throw new Error(`Failed with status: ${response.status}`);
         }
@@ -126,7 +126,7 @@ export const ChatContextProvider = ({ children, user }) => {
     setActiveChatUserChats(val => { return { ...val, userData: userChatsList[index] } })
     fetch(`${baseUrl}/messages/${userChats[index]._id}`).then((response) => {
       if (response.status === 200) {
-        return response.json(); // Parse the JSON only if status is 200
+        return response.json();
       } else {
         throw new Error(`Failed with status: ${response.status}`);
       }
@@ -156,7 +156,7 @@ export const ChatContextProvider = ({ children, user }) => {
         }),
       }).then((response) => {
         if (response.status === 200) {
-          return response.json(); // Parse the JSON only if status is 200
+          return response.json();
         } else {
           throw new Error(`Failed with status: ${response.status}`);
         }
@@ -174,7 +174,7 @@ export const ChatContextProvider = ({ children, user }) => {
   const getNewFriend = (email) => {
     fetch(`${baseUrl}/user/findfriend/${email}`).then((response) => {
       if (response.status === 200) {
-        return response.json(); // Parse the JSON only if status is 200
+        return response.json();
       } else {
         throw new Error(`Failed with status: ${response.status}`);
       }
@@ -202,7 +202,7 @@ export const ChatContextProvider = ({ children, user }) => {
         }),
       }).then((response) => {
         if (response.status === 200) {
-          return response.json(); // Parse the JSON only if status is 200
+          return response.json();
         } else {
           throw new Error(`Failed with status: ${response.status}`);
         }
@@ -213,6 +213,16 @@ export const ChatContextProvider = ({ children, user }) => {
         console.log("error:", err);
       })
     }
+  }
+
+  const cleanUpData = ()=>{
+    setUserChats(null);
+    setUserChatsList([]);
+    setActiveChatUserChats();
+    setSocket(null);
+    setOnlineUsers([]);
+    setNewMessage(null);
+    setFindFriend(null)
   }
   return (
     <ChatContext.Provider value={{
@@ -227,7 +237,8 @@ export const ChatContextProvider = ({ children, user }) => {
       newMessage,
       findFriend,
       getNewFriend,
-      createNewChat
+      createNewChat,
+      cleanUpData
     }}>
       {children}
     </ChatContext.Provider>

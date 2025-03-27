@@ -20,7 +20,8 @@ export default function Chat() {
     newMessage,
     findFriend,
     getNewFriend,
-    createNewChat } = useContext(ChatContext);
+    createNewChat,
+    cleanUpData } = useContext(ChatContext);
   const [textMessage, setTextMessage] = useState();
   const [email, setEmail] = useState();
   const [findNewUser, setFindNewUser] = useState(false);
@@ -83,7 +84,7 @@ export default function Chat() {
             <img src={Logo} className='w-10 me-2' alt="userIcon" />
             <h1 className='my-auto'>{user?.name}</h1>
           </div>
-          <Button name="Logout" onClick={() => { logoutUser(); setUserData(null) }} />
+          <Button name="Logout" onClick={() => { logoutUser(); setUserData(null); cleanUpData() }} />
         </div>
       </div>
 
