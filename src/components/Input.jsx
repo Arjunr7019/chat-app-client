@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import '../App.css'
+import '../App.css';
+import { IoEyeOutline } from "react-icons/io5";
+import { IoEyeOffOutline } from "react-icons/io5";
 
 export default function Input({ name, type,value,onChange }) {
     const [showPassword,setShowPassword] = useState(false);
@@ -15,8 +17,9 @@ export default function Input({ name, type,value,onChange }) {
                 onChange={onChange}
                 value={value}/>
             {name === "Message" ? <></> : <label className={value===""?'inputLabel':'inputLabelActive'} htmlFor="inputText">{name}</label>}
-            {name === "Password" ? <p className='absolute right-2 top-0 translate-y-1/3 cursor-pointer' 
-             onClick={()=> showPassword ? setShowPassword(false):setShowPassword(true)}>show</p>:<></>}
+            {name === "Password" ? <p className='absolute right-2 top-0 translate-y-1/2 h-5 cursor-pointer' 
+             onClick={()=> showPassword ? setShowPassword(false):setShowPassword(true)}>{
+                showPassword ? <IoEyeOutline className='w-5' />:<IoEyeOffOutline className='w-5'/>}</p>:<></>}
         </div>
     )
 }
