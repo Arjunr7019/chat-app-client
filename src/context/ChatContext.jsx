@@ -208,12 +208,33 @@ export const ChatContextProvider = ({ children, user }) => {
         }
       }).then((data) => {
         console.log("response", data)
+        updateActiveUsers();
         // setUserChats(prevArray => [...prevArray, data]);
       }).catch(err => {
         console.log("error:", err);
       })
     }
   }
+  const updateActiveUsers = () => {
+    if (user?._id) {
+      setIsUserChatLoading(true);
+      setUserChatsError(null);
+      fetch(`${baseUrl}/chats/${user?._id}`).then((response) => {
+        if (response.status === 200) {
+          setIsUserChatLoading(false);
+          return response.json();
+        } else {
+          throw new Error(`Failed with status: ${response.status}`);
+        }
+      }).then((data) => {
+        setUserChats(data);
+        // data.map((e)=> console.log(e.members))
+      }).catch(err => {
+        console.log("error:", err);
+        setUserChatsError(err)
+      })
+    }
+  };
 
   const cleanUpData = ()=>{
     setUserChats(null);
