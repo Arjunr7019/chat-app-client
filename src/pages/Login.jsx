@@ -21,23 +21,23 @@ export default function Login() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email:inputData.email,
-        password:inputData.password
+        email: inputData.email,
+        password: inputData.password
       }),
     })
-    .then((response) => {
-      if (response.status === 200) {
-        return response.json(); // Parse the JSON only if status is 200
-      } else {
-        throw new Error(`Failed with status: ${response.status}`);
-      }
-    })
-    .then((data) => {
-      setUserData(data);
-      navigate("/");
-      Services.setUser(data)
-    })
-    .catch((error) => console.error("Error:", error));
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json(); // Parse the JSON only if status is 200
+        } else {
+          throw new Error(`Failed with status: ${response.status}`);
+        }
+      })
+      .then((data) => {
+        setUserData(data);
+        navigate("/");
+        Services.setUser(data)
+      })
+      .catch((error) => console.error("Error:", error));
   };
 
   return (
@@ -49,7 +49,9 @@ export default function Login() {
         <div className='flex justify-center items-center mb-1'>
           <Link className='text-center cursor-pointer w-full text-sm' to="/register">Create an Account</Link>
         </div>
-        <p className='text-center mb-3 cursor-pointer text-sm'>Forgot Password</p>
+        <div className='flex justify-center items-center'>
+          <Link className='text-center mb-3 cursor-pointer text-sm' to="/forgot-password">Forgot Password</Link>
+        </div>
         <div className='flex justify-center items-center mb-3'>
           <Button onClick={() => handelLogin()} name="Login" />
         </div>

@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
 import './App.css';
 import { UserAuthContext } from './context/UserAuth';
-import Services from './localStorage/Services';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Chat from './pages/Chat';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
-import { useNavigate } from "react-router-dom";
+import ForgotPassword from './pages/ForgotPassword';
 import { baseUrl } from './assets/Endpoints';
 import { ripples } from 'ldrs'
 import { ChatContextProvider } from './context/ChatContext';
@@ -41,6 +40,7 @@ function App() {
         <Route path="/" element={<Chat />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<SignUp />} />
+        <Route path="/forgot-password" element={<ForgotPassword/>}/>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes> :
         <div className='h-screen flex justify-center items-center'>
