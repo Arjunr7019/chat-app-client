@@ -18,7 +18,7 @@ export default function ForgotPassword() {
                         onChange={(e) => setInputData(val => { return { ...val, email: e.target.value } })}
                         name="Email"
                         type="Text" />
-                    <Button name="Get OTP" onClick={() => setOtpGenerated(true)} />
+                    <Button name="Get OTP" extraClassNames="w-1/4 mb-4 ms-2" onClick={() => setOtpGenerated(true)} />
                 </div>
                 {otpGenerated ? <div>
                     <Input

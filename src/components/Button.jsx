@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default function Button({ name,onClick,extraClassNames }) {
-  const nameCheck = ["Send","Find","Add New User","Back To Chats","Add"]
+  const nameCheck = ["Send","Find","Add New User","Back To Chats","Add","Get OTP"]
   return (
     <button
     onClick={onClick}
