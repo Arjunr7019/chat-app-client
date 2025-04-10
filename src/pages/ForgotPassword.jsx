@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import '../App.css';
 import { Link } from 'react-router-dom';
+import { UserAuthContext } from '../context/UserAuth';
 
 export default function ForgotPassword() {
     const [inputData, setInputData] = useState({ email: "", otp: "",password:"" });
-    const [otpGenerated, setOtpGenerated] = useState(false);
+    const { otpSendSuccessfully,forgotPassword } = useContext(UserAuthContext);
 
     return (
         <div className='flex justify-center items-center h-screen'>
@@ -18,9 +19,9 @@ export default function ForgotPassword() {
                         onChange={(e) => setInputData(val => { return { ...val, email: e.target.value } })}
                         name="Email"
                         type="Text" />
-                    <Button name="Get OTP" extraClassNames="w-1/4 mb-4 ms-2" onClick={() => setOtpGenerated(true)} />
+                    <Button name="Get OTP" extraClassNames="w-1/4 mb-4 ms-2" onClick={() => forgotPassword()} />
                 </div>
-                {otpGenerated ? <div>
+                {otpSendSuccessfully ? <div>
                     <Input
                         value={inputData.email}
                         onChange={(e) => setInputData(val => { return { ...val, otp: e.target.value } })}
@@ -35,7 +36,7 @@ export default function ForgotPassword() {
                 <div className='flex justify-center items-center mb-3'>
                     <Link className='text-center cursor-pointer w-full text-sm' to="/login">Back to Login</Link>
                 </div>
-                {otpGenerated ? <div className='flex justify-center items-center mb-3'>
+                {otpSendSuccessfully ? <div className='flex justify-center items-center mb-3'>
                     <Button name="Submit" />
                 </div>:<></>}
             </div>
