@@ -34,32 +34,32 @@ export const UserAuthProvider = ({ children }) => {
         })
     }, [])
 
-    const forgotPassword = (email,otp,newPassword) => {
-        fetch(`${baseUrl}/forgotPassword`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email,
-                otp,
-                newPassword
-            }),
-        }).then((response) => {
-            if (response.status === 200) {
-                return response.json();
-            } else {
-                throw new Error(`Failed with status: ${response.status}`);
-            }
-        }).then((data) => {
-            setOtpSendSuccessfully(true);
-        }).catch(err => {
-            console.log("error:", err);
-        })
+    const getOtp = (email) => {
+        if(email){
+            fetch(`${baseUrl}/forgotPassword`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email
+                }),
+            }).then((response) => {
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    throw new Error(`Failed with status: ${response.status}`);
+                }
+            }).then((data) => {
+                setOtpSendSuccessfully(true);
+            }).catch(err => {
+                console.log("error:", err);
+            })
+        }
     };
 
     return (
-        <UserAuthContext.Provider value={{ user, setUser, setUserData, logoutUser,forgotPassword,otpSendSuccessfully }}>
+        <UserAuthContext.Provider value={{ user, setUser, setUserData, logoutUser,getOtp,otpSendSuccessfully }}>
             {children}
         </UserAuthContext.Provider>
     );
