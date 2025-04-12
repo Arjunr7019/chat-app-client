@@ -7,6 +7,7 @@ import { UserAuthContext } from '../context/UserAuth';
 import { useNavigate } from "react-router-dom";
 import Services from '../localStorage/Services';
 import { baseUrl } from '../assets/Endpoints';
+import { Toaster, toast } from 'sonner'
 
 export default function SignUp() {
   const [inputData, setInputData] = useState({ name: "", email: "", gender: "", password: "" });
@@ -15,6 +16,11 @@ export default function SignUp() {
   const navigate = useNavigate();
 
   const handelSignUp = () => {
+    if (inputData.email === "" || inputData.password === "" || inputData.gender === "" || inputData.name === "") {
+          toast.warning('Please fill in both all the inputs');
+          return;
+        }
+
     fetch(`${baseUrl}/user/register`, {
       method: "POST",
       headers: {
@@ -45,6 +51,7 @@ export default function SignUp() {
 
   return (
     <div className='flex justify-center items-center h-screen'>
+      <Toaster position="top-center"/>
       <div className='themeCard px-5 rounded-md py-5'>
         <h1 className='text-center text-3xl mb-4'>SignUp</h1>
         <Input value={inputData.name} onChange={(e) => setInputData(val => { return { ...val, name: e.target.value } })} name="Name" type="Text" />
