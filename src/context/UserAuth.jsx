@@ -56,7 +56,7 @@ export const UserAuthProvider = ({ children }) => {
                 console.log("error:", err);
             })
         }else{
-            console.log("error: empty email field");
+            console.log("Error: empty email field");
         }
     };
 
