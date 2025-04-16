@@ -19,9 +19,9 @@ export default function Input({ name, type,value,onChange }) {
                 onChange={onChange}
                 value={value}/>
             {name === "Message" ? <></> : <label className={value===""?'inputLabel':'inputLabelActive'} htmlFor="inputText">{name}</label>}
-            {name === "Password" ? <p className='absolute right-2 top-0 translate-y-1/2 h-5 cursor-pointer' 
+            {name === "Password" ? <a className='absolute right-2 top-0 translate-y-1/2 h-5 cursor-pointer flex justify-center items-center' 
              onClick={()=> showPassword ? setShowPassword(false):setShowPassword(true)}>{
-                showPassword ? <IoEyeOutline className='w-5' />:<IoEyeOffOutline className='w-5'/>}</p>:<></>}
+                showPassword ? <IoEyeOutline className='w-5' />:<IoEyeOffOutline className='w-5'/>}</a>:<></>}
         </div>
     )
 }
