@@ -6,7 +6,7 @@ import { IoEyeOffOutline } from "react-icons/io5";
 export default function Input({ name, type,value,onChange }) {
     const [showPassword,setShowPassword] = useState(false);
     const nameCheck = ["Message","Password","OTP","New Password","Gender","Name"]
-    const inputWidthCheck = ["OTP","New Password","Message"]
+    const inputWidthCheck = ["OTP","New Password","Message","New Message"]
     return (
         <div className='relative w-full' style={name === "Message" ? { marginBottom: "0" } : { marginBottom: "1rem" }}>
             <input
