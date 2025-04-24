@@ -36,15 +36,7 @@ export const UserAuthProvider = ({ children }) => {
 
     const getOtp = (email) => {
         if(email){
-            fetch(`${baseUrl}/forgotPassword`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    email
-                }),
-            }).then((response) => {
+            fetch(`${baseUrl}/forgotPassword/${email}`).then((response) => {
                 if (response.status === 200) {
                     return response.json();
                 } else {
@@ -60,8 +52,12 @@ export const UserAuthProvider = ({ children }) => {
         }
     };
 
+    const verifyOtp = ()=>{
+
+    }
+
     return (
-        <UserAuthContext.Provider value={{ user, setUser, setUserData, logoutUser,getOtp,otpSendSuccessfully }}>
+        <UserAuthContext.Provider value={{ user, setUser, setUserData, logoutUser,getOtp,otpSendSuccessfully,verifyOtp }}>
             {children}
         </UserAuthContext.Provider>
     );
