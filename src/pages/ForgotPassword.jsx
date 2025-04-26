@@ -26,12 +26,12 @@ export default function ForgotPassword() {
                 </div>
                 {otpSendSuccessfully ? <div>
                     <Input
-                        value={inputData.email}
+                        value={inputData.otp}
                         onChange={(e) => setInputData(val => { return { ...val, otp: e.target.value } })}
                         name="OTP"
                         type="Text" />
                     <Input
-                        value={inputData.email}
+                        value={inputData.password}
                         onChange={(e) => setInputData(val => { return { ...val, password: e.target.value } })}
                         name="New Password"
                         type="Text" />

@@ -3,7 +3,7 @@ import React, { createContext, useState, useEffect } from "react";
 import Services from "../localStorage/Services";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../assets/Endpoints";
-import { Password } from "@mui/icons-material";
+import { Toaster, toast } from 'sonner'
 
 export const UserAuthContext = createContext(null);
 
@@ -44,6 +44,7 @@ export const UserAuthProvider = ({ children }) => {
                 }
             }).then((data) => {
                 setOtpSendSuccessfully(true);
+                toast.success('OTP Sent Successfully')
             }).catch(err => {
                 console.log("error:", err);
             })
@@ -58,6 +59,7 @@ export const UserAuthProvider = ({ children }) => {
 
     return (
         <UserAuthContext.Provider value={{ user, setUser, setUserData, logoutUser,getOtp,otpSendSuccessfully,verifyOtp }}>
+            <Toaster position="top-center"/>
             {children}
         </UserAuthContext.Provider>
     );
