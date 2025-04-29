@@ -40,6 +40,7 @@ export default function ForgotPassword() {
                         }} />
                 </div>
                 {otpSendSuccessfully ? <div>
+                    <p className='m-0'>OTP Will Expire in 5 mins</p>
                     <Input
                         value={inputData.otp}
                         onChange={(e) => setInputData(val => { return { ...val, otp: e.target.value } })}
