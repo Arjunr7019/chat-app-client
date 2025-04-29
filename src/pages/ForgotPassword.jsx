@@ -35,7 +35,9 @@ export default function ForgotPassword() {
                         name="Email"
                         type="Text" />
                     <Button name={otpSendSuccessfully ? secondsLeft === 0?"Resend":`${secondsLeft}` : "Get OTP"} extraClassNames="w-1/4 mb-4 ms-2"
-                        onClick={() => { getOtp(inputData.email); inputData.email === "" ? toast.warning('Email input is empty') : "" }} />
+                        onClick={() => { getOtp(inputData.email); 
+                        inputData.email === "" ? toast.warning('Email input is empty') : "";
+                        }} />
                 </div>
                 {otpSendSuccessfully ? <div>
                     <Input
