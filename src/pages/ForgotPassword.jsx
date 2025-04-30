@@ -28,6 +28,7 @@ export default function ForgotPassword() {
             <Toaster position="top-center" />
             <div className='themeCard px-5 rounded-md py-5'>
                 <h1 className='text-center text-2xl mb-4'>Forgot Password</h1>
+                {otpSendSuccessfully ? <p className='mb-3'>OTP Will Expire in 5 mins</p>:<></>}
                 <div className='flex flex-row w-full'>
                     <Input
                         value={inputData.email}
@@ -40,7 +41,6 @@ export default function ForgotPassword() {
                         }} />
                 </div>
                 {otpSendSuccessfully ? <div>
-                    <p className='m-0'>OTP Will Expire in 5 mins</p>
                     <Input
                         value={inputData.otp}
                         onChange={(e) => setInputData(val => { return { ...val, otp: e.target.value } })}
