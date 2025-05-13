@@ -3,7 +3,7 @@ import '../App.css';
 import { IoEyeOutline } from "react-icons/io5";
 import { IoEyeOffOutline } from "react-icons/io5";
 
-export default function Input({ name, type,value,onChange }) {
+export default function Input({ name, type,value,onChange,extraClassNames }) {
     const [showPassword,setShowPassword] = useState(false);
     const nameCheck = ["Message","Password","OTP","New Password","Gender","Name"]
     const inputWidthCheck = ["OTP","New Password","Message"]
@@ -11,7 +11,7 @@ export default function Input({ name, type,value,onChange }) {
         <div className='relative w-full' style={name === "Message" ? { marginBottom: "0" } : { marginBottom: "1rem" }}>
             <input
                 id='inputText'
-                className='inputForm rounded-md p-2'
+                className={`inputForm rounded-md p-2 ${extraClassNames}`}
                 placeholder={name === "Message" ? "Message" : ""}
                 style={inputWidthCheck.includes(name) ? { width: "100%" } : { width: "18rem" }}
                 type={showPassword ? "text": type}

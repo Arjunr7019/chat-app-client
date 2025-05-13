@@ -8,7 +8,7 @@ import { Toaster, toast } from 'sonner'
 
 export default function ForgotPassword() {
     const [inputData, setInputData] = useState({ email: "", otp: "", password: "" });
-    const { otpSendSuccessfully, getOtp } = useContext(UserAuthContext);
+    const { otpSendSuccessfully, getOtp, verifyOtp,otpVerifiedSuccessfully } = useContext(UserAuthContext);
     const [secondsLeft, setSecondsLeft] = useState(60);
 
     useEffect(() => {
@@ -21,31 +21,37 @@ export default function ForgotPassword() {
         }
 
         return () => clearInterval(timer);
-    }, [secondsLeft,otpSendSuccessfully])
+    }, [secondsLeft, otpSendSuccessfully])
 
     return (
         <div className='flex justify-center items-center h-screen'>
             <Toaster position="top-center" />
             <div className='themeCard px-5 rounded-md py-5'>
                 <h1 className='text-center text-2xl mb-4'>Forgot Password</h1>
-                {otpSendSuccessfully ? <p className='mb-3'>OTP Will Expire in 5 mins</p>:<></>}
+                {/* {otpSendSuccessfully ? <p className='mb-3'>OTP Will Expire in 5 mins</p> : <></>} */}
                 <div className='flex flex-row w-full'>
                     <Input
                         value={inputData.email}
                         onChange={(e) => setInputData(val => { return { ...val, email: e.target.value } })}
                         name="Email"
                         type="Text" />
-                    <Button name={otpSendSuccessfully ? secondsLeft === 0?"Resend":`${secondsLeft}` : "Get OTP"} extraClassNames="w-1/4 mb-4 ms-2"
-                        onClick={() => { getOtp(inputData.email); 
-                        inputData.email === "" ? toast.warning('Email input is empty') : "";
+                    <Button name={otpSendSuccessfully ? secondsLeft === 0 ? "Resend" : `${secondsLeft}` : "Get OTP"} extraClassNames="w-1/4 mb-4 ms-2"
+                        onClick={() => {
+                            getOtp(inputData.email);
+                            inputData.email === "" ? toast.warning('Email input is empty') : "";
                         }} />
                 </div>
                 {otpSendSuccessfully ? <div>
-                    <Input
-                        value={inputData.otp}
-                        onChange={(e) => setInputData(val => { return { ...val, otp: e.target.value } })}
-                        name="OTP"
-                        type="Text" />
+                    <div className='flex flex-row w-full'>
+                        <Input
+                            value={inputData.otp}
+                            onChange={(e) => setInputData(val => { return { ...val, otp: e.target.value } })}
+                            name="OTP"
+                            type="Text"
+                            extraClassNames={otpVerifiedSuccessfully} />
+                        <Button name="Verify" extraClassNames="w-1/4 mb-4 ms-2"
+                        onClick={()=> verifyOtp(inputData.email,inputData.otp)}/>
+                    </div>
                     <Input
                         value={inputData.password}
                         onChange={(e) => setInputData(val => { return { ...val, password: e.target.value } })}

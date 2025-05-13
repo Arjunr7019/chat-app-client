@@ -9,7 +9,8 @@ export const UserAuthContext = createContext(null);
 
 export const UserAuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [otpSendSuccessfully,setOtpSendSuccessfully] = useState(false);
+    const [otpSendSuccessfully, setOtpSendSuccessfully] = useState(false);
+    const [otpVerifiedSuccessfully, setOtpVerifiedSuccessfully] = useState("");
 
     const navigate = useNavigate();
 
@@ -35,7 +36,7 @@ export const UserAuthProvider = ({ children }) => {
     }, [])
 
     const getOtp = (email) => {
-        if(email){
+        if (email) {
             fetch(`${baseUrl}/forgotPassword/${email}`).then((response) => {
                 if (response.status === 200) {
                     return response.json();
@@ -47,19 +48,46 @@ export const UserAuthProvider = ({ children }) => {
                 toast.success('OTP Sent Successfully')
             }).catch(err => {
                 console.log("error:", err);
+                toast.warning(err)
             })
-        }else{
+        } else {
             console.log("Error: empty email field");
         }
     };
 
-    const verifyOtp = ()=>{
-
+    const verifyOtp = (email, otp) => {
+        if (email !== "" && otp !== "") {
+            fetch(`${baseUrl}/forgotPassword/verifyOtp`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email,
+                    otp
+                }),
+            }).then((response) => {
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    throw new Error(`Failed with status: ${response.status}`);
+                }
+            }).then((data) => {
+                toast.success('OTP Verified Successfully');
+                setOtpVerifiedSuccessfully("!border-green-500")
+            }).catch(err => {
+                console.log("error:", err);
+                toast.warning(err)
+                setOtpVerifiedSuccessfully("!border-red-500")
+            })
+        } else {
+            console.log("Error:email and otp field are empty");
+        }
     }
 
     return (
-        <UserAuthContext.Provider value={{ user, setUser, setUserData, logoutUser,getOtp,otpSendSuccessfully,verifyOtp }}>
-            <Toaster position="top-center"/>
+        <UserAuthContext.Provider value={{ user, setUser, setUserData, logoutUser, getOtp, otpSendSuccessfully, verifyOtp,otpVerifiedSuccessfully }}>
+            <Toaster position="top-center" />
             {children}
         </UserAuthContext.Provider>
     );
