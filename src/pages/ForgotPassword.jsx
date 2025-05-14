@@ -10,6 +10,7 @@ export default function ForgotPassword() {
     const [inputData, setInputData] = useState({ email: "", otp: "", password: "" });
     const { otpSendSuccessfully, getOtp, verifyOtp,otpVerifiedSuccessfully } = useContext(UserAuthContext);
     const [secondsLeft, setSecondsLeft] = useState(60);
+    const [sessionTimeoutSecondsLeft, setSessionTimeoutSecondsLeft] = useState(240);
 
     useEffect(() => {
         let timer;
@@ -23,12 +24,31 @@ export default function ForgotPassword() {
         return () => clearInterval(timer);
     }, [secondsLeft, otpSendSuccessfully])
 
+     useEffect(() => {
+        let timer;
+
+        if (otpVerifiedSuccessfully === "!border-green-500" && sessionTimeoutSecondsLeft > 0) {
+            timer = setInterval(() => {
+                setSessionTimeoutSecondsLeft(prev => prev - 1);
+            }, 1000);
+        }
+
+        if(sessionTimeoutSecondsLeft===0){
+            toast.warning('Session timeout, try agin later')
+            setTimeout(()=>{
+                window.location.reload();
+            },5000);
+        }
+
+        return () => clearInterval(timer);
+    }, [sessionTimeoutSecondsLeft, otpVerifiedSuccessfully])
+
     return (
         <div className='flex justify-center items-center h-screen'>
             <Toaster position="top-center" />
             <div className='themeCard px-5 rounded-md py-5'>
                 <h1 className='text-center text-2xl mb-4'>Forgot Password</h1>
-                {/* {otpSendSuccessfully ? <p className='mb-3'>OTP Will Expire in 5 mins</p> : <></>} */}
+                {otpVerifiedSuccessfully === "!border-green-500" ? <p className='mb-3'>{`session will close in ${sessionTimeoutSecondsLeft}`}</p> : <></>}
                 <div className='flex flex-row w-full'>
                     <Input
                         value={inputData.email}
