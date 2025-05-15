@@ -85,8 +85,49 @@ export const UserAuthProvider = ({ children }) => {
         }
     }
 
+    const updateNewPassword = (email,newPassword)=>{
+        if(email !== "" && newPassword !== ""){
+            fetch(`${baseUrl}/forgotPassword/updateNewPassword`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email,
+                    newPassword
+                }),
+            }).then((response) => {
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    throw new Error(`Failed with status: ${response.status}`);
+                }
+            }).then((data) => {
+                toast.success('New Password Updated Successfully');
+                // setOtpVerifiedSuccessfully("!border-green-500")
+            }).catch(err => {
+                console.log("error:", err);
+                toast.warning(err)
+                // setOtpVerifiedSuccessfully("!border-red-500")
+            })
+        }else{
+            console.log("Error:email and new password field are empty");
+        }
+    }
+
     return (
-        <UserAuthContext.Provider value={{ user, setUser, setUserData, logoutUser, getOtp, otpSendSuccessfully, verifyOtp,otpVerifiedSuccessfully }}>
+        <UserAuthContext.Provider 
+        value={{ 
+            user, 
+            setUser, 
+            setUserData, 
+            logoutUser, 
+            getOtp, 
+            otpSendSuccessfully, 
+            verifyOtp,
+            otpVerifiedSuccessfully,
+            updateNewPassword
+            }}>
             <Toaster position="top-center" />
             {children}
         </UserAuthContext.Provider>

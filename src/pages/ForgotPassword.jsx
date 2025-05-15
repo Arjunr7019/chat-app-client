@@ -8,7 +8,7 @@ import { Toaster, toast } from 'sonner'
 
 export default function ForgotPassword() {
     const [inputData, setInputData] = useState({ email: "", otp: "", password: "" });
-    const { otpSendSuccessfully, getOtp, verifyOtp,otpVerifiedSuccessfully } = useContext(UserAuthContext);
+    const { otpSendSuccessfully, getOtp, verifyOtp,otpVerifiedSuccessfully,updateNewPassword } = useContext(UserAuthContext);
     const [secondsLeft, setSecondsLeft] = useState(60);
     const [sessionTimeoutSecondsLeft, setSessionTimeoutSecondsLeft] = useState(240);
 
@@ -82,7 +82,7 @@ export default function ForgotPassword() {
                     <Link className='text-center cursor-pointer w-full text-sm' to="/login">Back to Login</Link>
                 </div>
                 {otpSendSuccessfully ? <div className='flex justify-center items-center mb-3'>
-                    <Button name="Submit" />
+                    <Button name="Submit" onClick={()=> updateNewPassword(inputData.email,inputData.email,inputData.password)} />
                 </div> : <></>}
             </div>
         </div>
