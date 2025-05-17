@@ -3,7 +3,7 @@ import React, { createContext, useState, useEffect } from "react";
 import Services from "../localStorage/Services";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../assets/Endpoints";
-import { Toaster, toast } from 'sonner'
+import { Toaster, toast } from 'sonner';
 
 export const UserAuthContext = createContext(null);
 
@@ -85,8 +85,8 @@ export const UserAuthProvider = ({ children }) => {
         }
     }
 
-    const updateNewPassword = (email,newPassword)=>{
-        if(email !== "" && newPassword !== ""){
+    const updateNewPassword = (email, password) => {
+        if (email !== "" && password !== "") {
             fetch(`${baseUrl}/forgotPassword/updateNewPassword`, {
                 method: "POST",
                 headers: {
@@ -94,7 +94,7 @@ export const UserAuthProvider = ({ children }) => {
                 },
                 body: JSON.stringify({
                     email,
-                    newPassword
+                    password
                 }),
             }).then((response) => {
                 if (response.status === 200) {
@@ -104,29 +104,31 @@ export const UserAuthProvider = ({ children }) => {
                 }
             }).then((data) => {
                 toast.success('New Password Updated Successfully');
-                // setOtpVerifiedSuccessfully("!border-green-500")
+                setTimeout(() => {
+                    navigate("/login");
+                }, 5000);
             }).catch(err => {
                 console.log("error:", err);
                 toast.warning(err)
                 // setOtpVerifiedSuccessfully("!border-red-500")
             })
-        }else{
+        } else {
             console.log("Error:email and new password field are empty");
         }
     }
 
     return (
-        <UserAuthContext.Provider 
-        value={{ 
-            user, 
-            setUser, 
-            setUserData, 
-            logoutUser, 
-            getOtp, 
-            otpSendSuccessfully, 
-            verifyOtp,
-            otpVerifiedSuccessfully,
-            updateNewPassword
+        <UserAuthContext.Provider
+            value={{
+                user,
+                setUser,
+                setUserData,
+                logoutUser,
+                getOtp,
+                otpSendSuccessfully,
+                verifyOtp,
+                otpVerifiedSuccessfully,
+                updateNewPassword
             }}>
             <Toaster position="top-center" />
             {children}
