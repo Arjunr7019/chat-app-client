@@ -105,6 +105,8 @@ export const UserAuthProvider = ({ children }) => {
             }).then((data) => {
                 toast.success('New Password Updated Successfully');
                 setTimeout(() => {
+                    setOtpSendSuccessfully(false);
+                    setOtpVerifiedSuccessfully("");
                     navigate("/login");
                 }, 5000);
             }).catch(err => {

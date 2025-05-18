@@ -76,13 +76,13 @@ export default function ForgotPassword() {
                         value={inputData.password}
                         onChange={(e) => setInputData(val => { return { ...val, password: e.target.value } })}
                         name="New Password"
-                        type="Text" />
+                        type="password" />
                 </div> : <></>}
                 <div className='flex justify-center items-center mb-3'>
                     <Link className='text-center cursor-pointer w-full text-sm' to="/login">Back to Login</Link>
                 </div>
                 {otpSendSuccessfully ? <div className='flex justify-center items-center mb-3'>
-                    <Button name="Submit" onClick={()=> updateNewPassword(inputData.email,inputData.email,inputData.password)} />
+                    <Button name="Submit" onClick={()=> updateNewPassword(inputData.email,inputData.password)} />
                 </div> : <></>}
             </div>
         </div>
