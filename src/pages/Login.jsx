@@ -41,9 +41,13 @@ export default function Login() {
         .then((data) => {
           setUserData(data);
           navigate("/");
-          Services.setUser(data)
+          Services.setUser(data);
+          window.location.reload();
         })
-        .catch((error) => console.error("Error:", error));  
+        .catch((error) => {
+          toast.warning("Inavalid email and password");
+          console.error("Error:", error);
+        });  
   };
 
   return (
