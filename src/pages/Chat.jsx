@@ -28,7 +28,7 @@ export default function Chat() {
 
   const list = userChatsList;
 
-  // console.log(activeChatUserChats?.userChats[0].createdAt)
+  // console.log(userChatsList);
   useEffect(() => {
     // console.log(newMessage)
     if (newMessage) {
@@ -55,6 +55,7 @@ export default function Chat() {
             <img className='w-10 me-2' src={Logo} alt="logo" />
             <h1 className='text-lg font-medium'>JellyFish</h1>
           </div>
+
           {findNewUser ? <div className='w-full flex flex-col items-center'>
             <div className='w-4/5 flex justify-center pb-2'>
               <Button extraClassNames="w-full m-0" name="Back To Chats" onClick={() => findNewUser ? setFindNewUser(false) : setFindNewUser(true)} />
@@ -69,6 +70,7 @@ export default function Chat() {
             </div>:<p className='text-gray-500'>Search Friend by Email</p>}
             {/* for find new friend response section */}
           </div> :
+          // ---------------chatList[friends]----------------
             <div className='w-full flex flex-col items-center'>
               <div className='w-4/5 flex justify-center pb-2'>
                 <Button extraClassNames="w-full m-0" name="Add New User" onClick={() => findNewUser ? setFindNewUser(false) : setFindNewUser(true)} />
@@ -79,6 +81,7 @@ export default function Chat() {
               )}
             </div>}
         </div>
+        {/* ---------loggedIn user data----------- */}
         <div className='w-full flex flex-row justify-between px-2 pb-2'>
           <div className='flex flex-row'>
             <img src={Logo} className='w-10 me-2' alt="userIcon" />

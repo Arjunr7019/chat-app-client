@@ -94,6 +94,7 @@ export const ChatContextProvider = ({ children, user }) => {
   }, [user]);
 
   //getting active chat users data
+  console.log("userChats",userChats);
   useEffect(() => {
     let members = []
     if (user?._id) {
@@ -119,6 +120,24 @@ export const ChatContextProvider = ({ children, user }) => {
       })
     }
   }, [userChats]);
+
+  // to get last message api call
+  useEffect(()=>{
+    if (user?._id) {
+      fetch(`${baseUrl}/chats/lastMessage/${user?._id}`).then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          throw new Error(`Failed with status: ${response.status}`);
+        }
+      }).then((data) => {
+        // console.log(data)
+        
+      }).catch(err => {
+        console.log("error:", err);
+      })
+    }
+  },[userChats])
 
   //getting full chats of particular user
   const getFullChatMessages = (index) => {
