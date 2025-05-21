@@ -131,8 +131,7 @@ export const ChatContextProvider = ({ children, user }) => {
           throw new Error(`Failed with status: ${response.status}`);
         }
       }).then((data) => {
-        // console.log(data)
-        
+        console.log(data);
       }).catch(err => {
         console.log("error:", err);
       })
