@@ -82,7 +82,7 @@ export default function Chat() {
             </div>}
         </div>
         {/* ---------loggedIn user data----------- */}
-        <div className='w-full flex flex-row justify-between px-2 pb-2'>
+        <div className='w-full flex flex-row justify-between px-5 pb-2'>
           <div className='flex flex-row'>
             <img src={Logo} className='w-10 me-2' alt="userIcon" />
             <h1 className='my-auto'>{user?.name}</h1>
