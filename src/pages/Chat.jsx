@@ -77,7 +77,7 @@ export default function Chat() {
               </div>
               {list?.map((chatUser, index) =>
                 <ChatCard onClick={() => getFullChatMessages(index)} 
-                userId={chatUser._id} name={chatUser.name} key={chatUser._id} lastMessage="Hi..." extraClassNames="mb-2" />
+                userId={chatUser._id} name={chatUser.name} key={chatUser._id} lastMessage="hi..." extraClassNames="mb-2" />
               )}
             </div>}
         </div>
