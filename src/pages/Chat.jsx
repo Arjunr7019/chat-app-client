@@ -77,7 +77,7 @@ export default function Chat() {
               </div>
               {list?.map((chatUser, index) =>
                 <ChatCard onClick={() => getFullChatMessages(index)} 
-                userId={chatUser._id} name={chatUser.name} key={chatUser._id} lastMessage="hi..." extraClassNames="mb-2" />
+                userId={chatUser.user._id} name={chatUser.user.name} key={chatUser.user._id} lastMessage={chatUser.lastMessage.text} extraClassNames="mb-2" />
               )}
             </div>}
         </div>
@@ -93,17 +93,17 @@ export default function Chat() {
 
 
       {activeChatUserChats ? <div className='themeCard h-full flex flex-col items-center m-2 rounded-md' style={{ width: "75%" }}>
-        <h1 className='text-center text-lg font-medium py-3'>{activeChatUserChats?.userData?.name}</h1>
+        <h1 className='text-center text-lg font-medium py-3'>{activeChatUserChats?.userData?.user.name}</h1>
         <div className='flex justify-center items-center w-full' style={{ height: "80%" }}>
           <div className='themeCard h-full rounded-md flex justify-center items-center' style={{ width: "95%" }}>
             {/* <img className='m-auto' src={ChatSectionBg} alt="img" /> */}
             <div style={{ overflowY: "scroll" }} className='w-full h-full p-3'>
               {activeChatUserChats?.userChats?.map((chat, index) =>
                 <div key={index}
-                  className={activeChatUserChats?.userData?._id === chat?.senderId ?
+                  className={activeChatUserChats?.userData?.user._id === chat?.senderId ?
                     'w-full flex flex-row justify-start items-end' : 'w-full flex flex-row justify-end items-end'}>
                   <p
-                    className={activeChatUserChats?.userData?._id === chat?.senderId ?
+                    className={activeChatUserChats?.userData?.user._id === chat?.senderId ?
                       'themeCard w-fit px-2 py-1 rounded-md rounded-bl-none mb-2' : 'themeCard w-fit px-2 py-1 rounded-md rounded-br-none mb-2'}
                   >{chat.text}</p>
                   <p className='ps-1 pb-2 m-0' style={{ fontSize: "9px" }}>{convertToIST(chat.createdAt)}</p>

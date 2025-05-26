@@ -15,7 +15,8 @@ export const ChatContextProvider = ({ children, user }) => {
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [newMessage, setNewMessage] = useState(null);
-  const [findFriend, setFindFriend] = useState(null)
+  const [findFriend, setFindFriend] = useState(null);
+  const [chatIdAndUserId, setChatIdAndUserId] = useState()
 
   let senderId;
   Services.getUser().then(res => senderId = res?._id)
@@ -85,6 +86,15 @@ export const ChatContextProvider = ({ children, user }) => {
         }
       }).then((data) => {
         setUserChats(data);
+        const chatUserArray = data?.map((e) => {
+          let findOtherUser = e.members.find((cu) => cu !== user._id);
+          return {
+            userId: findOtherUser,
+            chatId: e._id,
+          };
+        });
+        // console.log(data)
+        setChatIdAndUserId(JSON.stringify(chatUserArray));
         // data.map((e)=> console.log(e.members))
       }).catch(err => {
         console.log("error:", err);
@@ -94,49 +104,50 @@ export const ChatContextProvider = ({ children, user }) => {
   }, [user]);
 
   //getting active chat users data
-  console.log("userChats",userChats);
-  useEffect(() => {
-    let members = []
-    if (user?._id) {
-      userChats?.map((e) => {
-        let findOtherUser = e.members.find((cu) => cu !== user._id)
-        members.push(findOtherUser);
-      })
-      fetch(`${baseUrl}/user`).then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        } else {
-          throw new Error(`Failed with status: ${response.status}`);
-        }
-      }).then((data) => {
-        // console.log(data)
-        data.map((e) => {
-          if (members.includes(e._id)) {
-            setUserChatsList(item => [...item, e]);
-          }
-        })
-      }).catch(err => {
-        console.log("error:", err);
-      })
-    }
-  }, [userChats]);
+  // useEffect(() => {
+  //   let members = []
+  //   if (user?._id) {
+  //     fetch(`${baseUrl}/user`).then((response) => {
+  //       if (response.status === 200) {
+  //         return response.json();
+  //       } else {
+  //         throw new Error(`Failed with status: ${response.status}`);
+  //       }
+  //     }).then((data) => {
+  //       // console.log(data)
+  //       data.map((e) => {
+  //         if (members.includes(e._id)) {
+  //           setUserChatsList(item => [...item, e]);
+  //           console.log("membersId", e._id);
+  //         }
+  //       })
+  //     }).catch(err => {
+  //       console.log("error:", err);
+  //     })
+  //   }
+  // }, [userChats]);
+
+  // console.log("userChats", userChats);
+  // console.log("userChatsList", userChatsList);
+  // console.log("chatIdAndUserId", chatIdAndUserId)
 
   // to get last message api call
-  useEffect(()=>{
+  useEffect(() => {
     if (user?._id) {
-      fetch(`${baseUrl}/chats/lastMessage/${user?._id}`).then((response) => {
+      // console.log("chatIdAndUserId", chatIdAndUserId)
+      fetch(`${baseUrl}/messages/lastMessage/${chatIdAndUserId}`).then((response) => {
         if (response.status === 200) {
           return response.json();
         } else {
           throw new Error(`Failed with status: ${response.status}`);
         }
       }).then((data) => {
-        console.log(data);
+        setUserChatsList(data)
       }).catch(err => {
         console.log("error:", err);
       })
     }
-  },[userChats])
+  }, [userChats])
 
   //getting full chats of particular user
   const getFullChatMessages = (index) => {
@@ -205,10 +216,10 @@ export const ChatContextProvider = ({ children, user }) => {
     })
   }
 
-  const createNewChat = ()=>{
+  const createNewChat = () => {
     const firstId = senderId;
     const secondId = findFriend?._id
-    if(secondId){
+    if (secondId) {
       fetch(`${baseUrl}/chats`, {
         method: "POST",
         headers: {
@@ -254,7 +265,7 @@ export const ChatContextProvider = ({ children, user }) => {
     }
   };
 
-  const cleanUpData = ()=>{
+  const cleanUpData = () => {
     setUserChats(null);
     setUserChatsList([]);
     setActiveChatUserChats();
