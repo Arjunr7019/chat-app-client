@@ -68,20 +68,25 @@ export default function Chat() {
             </div>
             {findFriend ? <div className='w-4/5 flex flex-row items-center justify-center'>
               <ChatCard userId={findFriend?._id} name={findFriend?.name} key={findFriend?._id} />
-              <Button extraClassNames="ms-2" name="Add" onClick={()=> createNewChat()} />
-            </div>:<p className='text-gray-500'>Search Friend by Email</p>}
+              <Button extraClassNames="ms-2" name="Add" onClick={() => createNewChat()} />
+            </div> : <p className='text-gray-500'>Search Friend by Email</p>}
             {/* for find new friend response section */}
           </div> :
-          // ---------------chatList[friends]----------------
+            // ---------------chatList[friends]----------------
             <div className='w-full flex flex-col items-center'>
               <div className='w-4/5 flex justify-center pb-2'>
                 <Button extraClassNames="w-full m-0" name="Add New User" onClick={() => findNewUser ? setFindNewUser(false) : setFindNewUser(true)} />
               </div>
               {list?.map((chatUser, index) =>
-                <ChatCard onClick={() => getFullChatMessages(index)} 
-                userId={chatUser.user._id} name={chatUser.user.name} key={chatUser.user._id} 
-                lastMessage={user?._id === chatUser.lastMessage.senderId ? `You: ${chatUser.lastMessage.text}` : `${chatUser.user.name}: ${chatUser.lastMessage.text}`} 
-                extraClassNames="mb-2" />
+                <ChatCard onClick={() => getFullChatMessages(index)}
+                  userId={chatUser.user._id} name={chatUser.user.name} key={chatUser.user._id}
+                  lastMessage={user?._id === chatUser.lastMessage.senderId
+                      ? `You: ${chatUser.lastMessage.text}`
+                      : chatUser.lastMessage.text === ""
+                        ? ""
+                        : `${chatUser.user.name}: ${chatUser.lastMessage.text}`
+                  }
+                  extraClassNames="mb-2" />
               )}
             </div>}
         </div>
