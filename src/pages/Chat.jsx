@@ -51,6 +51,11 @@ export default function Chat() {
 
   return (
     <div className='h-screen flex justify-center items-center flex-row py-2'>
+      <div className='themeCard hidden justify-between items-center flex-col w-full m-2 rounded-md' style={{height:"25%"}}>
+
+      </div>
+
+
       <div className='themeCard flex justify-between items-center flex-col h-full m-2 rounded-md' style={{ width: "25%" }}>
         <div className='w-full flex flex-col items-center'>
           <div className='flex justify-center items-center flex-row py-3'>
