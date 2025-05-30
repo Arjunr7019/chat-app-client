@@ -51,10 +51,19 @@ export default function Chat() {
 
   return (
     <div className='h-screen flex justify-center items-center flex-row py-2'>
-      <div className='themeCard hidden justify-between items-center flex-col w-full m-2 rounded-md' style={{height:"25%"}}>
-
+      <div className='h-screen w-full hidden justify-start items-center flex-col px-2'>
+        <div className='themeCard flex justify-between items-center flex-row w-full m-2 px-3 rounded-md'>
+          <div className='flex justify-center items-center flex-row py-3'>
+            <img className='w-10 me-2' src={Logo} alt="logo" />
+            <h1 className='text-lg font-medium'>JellyFish</h1>
+          </div>
+          <nav className='flex flex-col'>
+            <span style={{ backgroundColor: "black", width: "24px", height: "3px", borderRadius: "2px" }} className='mb-1'></span>
+            <span style={{ backgroundColor: "black", width: "24px", height: "3px", borderRadius: "2px" }} className='mb-1'></span>
+            <span style={{ backgroundColor: "black", width: "24px", height: "3px", borderRadius: "2px" }} className='mb-1'></span>
+          </nav>
+        </div>
       </div>
-
 
       <div className='themeCard flex justify-between items-center flex-col h-full m-2 rounded-md' style={{ width: "25%" }}>
         <div className='w-full flex flex-col items-center'>
@@ -86,10 +95,10 @@ export default function Chat() {
                 <ChatCard onClick={() => getFullChatMessages(index)}
                   userId={chatUser.user._id} name={chatUser.user.name} key={chatUser.user._id}
                   lastMessage={user?._id === chatUser.lastMessage.senderId
-                      ? `You: ${chatUser.lastMessage.text}`
-                      : chatUser.lastMessage.text === ""
-                        ? ""
-                        : `${chatUser.user.name}: ${chatUser.lastMessage.text}`
+                    ? `You: ${chatUser.lastMessage.text}`
+                    : chatUser.lastMessage.text === ""
+                      ? ""
+                      : `${chatUser.user.name}: ${chatUser.lastMessage.text}`
                   }
                   extraClassNames="mb-2" />
               )}
