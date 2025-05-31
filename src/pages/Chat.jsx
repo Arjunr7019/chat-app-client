@@ -51,7 +51,7 @@ export default function Chat() {
 
   return (
     <div className='h-screen flex justify-center items-center flex-row py-2'>
-      <div className='h-screen w-full hidden justify-start items-center flex-col px-2'>
+      <div className='h-screen w-full sm:hidden flex justify-start items-center flex-col px-2'>
         <div className='themeCard flex justify-between items-center flex-row w-full m-2 px-3 rounded-md'>
           <div className='flex justify-center items-center flex-row py-3'>
             <img className='w-10 me-2' src={Logo} alt="logo" />
@@ -63,9 +63,28 @@ export default function Chat() {
             <span style={{ backgroundColor: "black", width: "24px", height: "3px", borderRadius: "2px" }} className='mb-1'></span>
           </nav>
         </div>
+
+        <p>mobile screen still under development it may not work properly</p>
+
+        <div className='w-full flex flex-col items-center'>
+          <div className='w-full flex justify-center pb-2'>
+            <Button extraClassNames="w-full m-0" name="Add New User" onClick={() => findNewUser ? setFindNewUser(false) : setFindNewUser(true)} />
+          </div>
+          {list?.map((chatUser, index) =>
+            <ChatCard onClick={() => getFullChatMessages(index)}
+              userId={chatUser.user._id} name={chatUser.user.name} key={chatUser.user._id}
+              lastMessage={user?._id === chatUser.lastMessage.senderId
+                ? `You: ${chatUser.lastMessage.text}`
+                : chatUser.lastMessage.text === ""
+                  ? ""
+                  : `${chatUser.user.name}: ${chatUser.lastMessage.text}`
+              }
+              extraClassNames="mb-2 w-full" />
+          )}
+        </div>
       </div>
 
-      <div className='themeCard flex justify-between items-center flex-col h-full m-2 rounded-md' style={{ width: "25%" }}>
+      <div className='themeCard sm:flex hidden justify-between items-center flex-col h-full m-2 rounded-md' style={{ width: "25%" }}>
         <div className='w-full flex flex-col items-center'>
           <div className='flex justify-center items-center flex-row py-3'>
             <img className='w-10 me-2' src={Logo} alt="logo" />
@@ -100,7 +119,7 @@ export default function Chat() {
                       ? ""
                       : `${chatUser.user.name}: ${chatUser.lastMessage.text}`
                   }
-                  extraClassNames="mb-2" />
+                  extraClassNames="mb-2 w-4/5" />
               )}
             </div>}
         </div>
@@ -115,7 +134,7 @@ export default function Chat() {
       </div>
 
 
-      {activeChatUserChats ? <div className='themeCard h-full flex flex-col items-center m-2 rounded-md' style={{ width: "75%" }}>
+      {activeChatUserChats ? <div className='themeCard h-full sm:flex hidden flex-col items-center m-2 rounded-md' style={{ width: "75%" }}>
         <h1 className='text-center text-lg font-medium py-3'>{activeChatUserChats?.userData?.user.name}</h1>
         <div className='flex justify-center items-center w-full' style={{ height: "80%" }}>
           <div className='themeCard h-full rounded-md flex justify-center items-center' style={{ width: "95%" }}>
@@ -146,7 +165,7 @@ export default function Chat() {
           <Button extraClassNames="ms-2" onClick={() => sendMessage(textMessage)} name="Send" />
         </div>
       </div> :
-        <div className='themeCard h-full flex flex-col justify-center items-center m-2 rounded-md' style={{ width: "75%" }}>
+        <div className='themeCard h-full sm:flex hidden flex-col justify-center items-center m-2 rounded-md' style={{ width: "75%" }}>
           <img src={ChatSectionBg} alt="img" />
           <h1>Welcome to JellyFish Chat App</h1>
         </div>}
