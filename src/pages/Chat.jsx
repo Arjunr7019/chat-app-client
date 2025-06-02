@@ -7,6 +7,7 @@ import Input from '../components/Input';
 import Button from '../components/Button';
 import { UserAuthContext } from '../context/UserAuth';
 import { ChatContext } from '../context/ChatContext';
+import { Rotate90DegreesCcw } from '@mui/icons-material';
 
 export default function Chat() {
   const { user, setUserData, logoutUser } = useContext(UserAuthContext);
@@ -25,7 +26,8 @@ export default function Chat() {
   const [textMessage, setTextMessage] = useState();
   const [email, setEmail] = useState();
   const [findNewUser, setFindNewUser] = useState(false);
-  const [mobileActiveChat, setMobileActiveChat] = useState(true);
+  const [mobileActiveChat, setMobileActiveChat] = useState(false);
+  const [menu,setMenu] = useState(false);
 
   const list = userChatsList;
 
@@ -58,12 +60,20 @@ export default function Chat() {
             <img className='w-10 me-2' src={Logo} alt="logo" />
             <h1 className='text-lg font-medium'>JellyFish</h1>
           </div>
-          <nav className='flex flex-col'>
+          <nav className='flex flex-col' onClick={()=> setMenu(true)}>
             <span style={{ backgroundColor: "black", width: "24px", height: "3px", borderRadius: "2px" }} className='mb-1'></span>
             <span style={{ backgroundColor: "black", width: "24px", height: "3px", borderRadius: "2px" }} className='mb-1'></span>
             <span style={{ backgroundColor: "black", width: "24px", height: "3px", borderRadius: "2px" }} className='mb-1'></span>
           </nav>
         </div>}
+        {menu ? <div className='themeCard h-screen px-5 py-6' style={{ width: "100%", position: "absolute", right: "0",zIndex:"999" }}>
+          <div className='flex relative top-4' onClick={()=> setMenu(false)}>
+            <span style={{ backgroundColor: "black", width: "24px", height: "3px", borderRadius: "2px" }} 
+            className='absolute rotate-45'></span>
+            <span style={{ backgroundColor: "black", width: "24px", height: "3px", borderRadius: "2px" }} 
+            className='absolute -rotate-45'></span>
+          </div>
+        </div>:<></>}
 
         <p>mobile screen still under development it may not work properly</p>
 
@@ -71,7 +81,7 @@ export default function Chat() {
           <div className='themeCard h-full sm:hidden flex flex-col items-center rounded-md w-screen'>
             <div className='w-full flex justify-center items-center flex-row px-4'>
               <div className='w-80'>
-                <p onClick={()=> mobileActiveChat ? setMobileActiveChat(false):setMobileActiveChat(true)}>back</p>
+                <p onClick={() => mobileActiveChat ? setMobileActiveChat(false) : setMobileActiveChat(true)}>back</p>
               </div>
               <h1 className='text-left w-100 text-lg font-medium py-3'>{activeChatUserChats?.userData?.user.name}</h1>
             </div>
@@ -109,7 +119,7 @@ export default function Chat() {
               <Button extraClassNames="w-full m-0" name="Add New User" onClick={() => findNewUser ? setFindNewUser(false) : setFindNewUser(true)} />
             </div>
             {list?.map((chatUser, index) =>
-              <ChatCard onClick={() => {getFullChatMessages(index);setMobileActiveChat(true)}}
+              <ChatCard onClick={() => { getFullChatMessages(index); setMobileActiveChat(true) }}
                 userId={chatUser.user._id} name={chatUser.user.name} key={chatUser.user._id}
                 lastMessage={user?._id === chatUser.lastMessage.senderId
                   ? `You: ${chatUser.lastMessage.text}`
