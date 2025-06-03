@@ -27,7 +27,7 @@ export default function Chat() {
   const [email, setEmail] = useState();
   const [findNewUser, setFindNewUser] = useState(false);
   const [mobileActiveChat, setMobileActiveChat] = useState(false);
-  const [menu,setMenu] = useState(false);
+  const [menu, setMenu] = useState(false);
 
   const list = userChatsList;
 
@@ -60,20 +60,29 @@ export default function Chat() {
             <img className='w-10 me-2' src={Logo} alt="logo" />
             <h1 className='text-lg font-medium'>JellyFish</h1>
           </div>
-          <nav className='flex flex-col' onClick={()=> setMenu(true)}>
+          <nav className='flex flex-col' onClick={() => setMenu(true)}>
             <span style={{ backgroundColor: "black", width: "24px", height: "3px", borderRadius: "2px" }} className='mb-1'></span>
             <span style={{ backgroundColor: "black", width: "24px", height: "3px", borderRadius: "2px" }} className='mb-1'></span>
             <span style={{ backgroundColor: "black", width: "24px", height: "3px", borderRadius: "2px" }} className='mb-1'></span>
           </nav>
         </div>}
-        {menu ? <div className='themeCard h-screen px-5 py-6' style={{ width: "100%", position: "absolute", right: "0",zIndex:"999" }}>
-          <div className='flex relative top-4' onClick={()=> setMenu(false)}>
-            <span style={{ backgroundColor: "black", width: "24px", height: "3px", borderRadius: "2px" }} 
-            className='absolute rotate-45'></span>
-            <span style={{ backgroundColor: "black", width: "24px", height: "3px", borderRadius: "2px" }} 
-            className='absolute -rotate-45'></span>
-          </div>
-        </div>:<></>}
+        {menu ?
+          <div className='themeCard h-screen px-5 py-6' style={{ width: "100%", position: "absolute", right: "0", zIndex: "999" }}>
+            <div className='flex relative top-4' onClick={() => setMenu(false)}>
+              <span style={{ backgroundColor: "black", width: "24px", height: "3px", borderRadius: "2px" }}
+                className='absolute rotate-45'></span>
+              <span style={{ backgroundColor: "black", width: "24px", height: "3px", borderRadius: "2px" }}
+                className='absolute -rotate-45'></span>
+            </div>
+            <div className='h-100 flex flex-col justify-start items-center pt-10 px-5'>
+                <div className='flex flex-col items-center'>
+                  <img src={Logo} className='w-20' alt="userIcon" />
+                  <h1 className='pt-2 text-2xl font-semibold'>{user?.name}</h1>
+                  <p className='pb-2'>{`Email: ${user?.email}`}</p>
+                </div>
+                <Button name="Logout" onClick={() => { logoutUser(); setUserData(null); cleanUpData() }} />
+            </div>
+          </div> : <></>}
 
         <p>mobile screen still under development it may not work properly</p>
 
