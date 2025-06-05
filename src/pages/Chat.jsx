@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState,useRef } from 'react';
 import '../App.css';
 import Logo from "../images/chatAppLogo.png";
 import ChatCard from '../components/ChatCard';
@@ -28,6 +28,8 @@ export default function Chat() {
   const [findNewUser, setFindNewUser] = useState(false);
   const [mobileActiveChat, setMobileActiveChat] = useState(false);
   const [menu, setMenu] = useState(false);
+  const lastMessageRef = useRef(null);
+  const mobileLastMessageRef = useRef(null);
 
   const list = userChatsList;
 
@@ -50,7 +52,17 @@ export default function Chat() {
     });
   };
 
-  console.log(user)
+  useEffect(() => {
+    // Scroll to the last message when chat updates
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+    if(mobileLastMessageRef.current){
+      mobileLastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [activeChatUserChats?.userChats?.length]);
+
+  // console.log(user)
 
   return (
     <div className='h-screen flex justify-center items-center flex-row py-2'>
@@ -97,7 +109,7 @@ export default function Chat() {
               <Button extraClassNames="ms-2" name="Find" onClick={() => getNewFriend(email)} />
             </div>
             {findFriend ? <div className='w-full flex flex-row items-center justify-center'>
-              <ChatCard userId={findFriend?._id} name={findFriend?.name} key={findFriend?._id} extraClassNames={"w-full"}/>
+              <ChatCard userId={findFriend?._id} name={findFriend?.name} key={findFriend?._id} extraClassNames={"w-full"} />
               <Button extraClassNames="ms-2" name="Add" onClick={() => createNewChat()} />
             </div> : <p className='text-gray-500'>Search Friend by Email</p>}
             {/* for find new friend response section */}
@@ -115,16 +127,20 @@ export default function Chat() {
                   <div className='themeCard h-full rounded-md flex justify-center items-center' style={{ width: "95%" }}>
                     {/* <img className='m-auto' src={ChatSectionBg} alt="img" /> */}
                     <div style={{ overflowY: "scroll" }} className='w-full h-full p-3'>
-                      {activeChatUserChats?.userChats?.map((chat, index) =>
-                        <div key={index}
-                          className={activeChatUserChats?.userData?.user._id === chat?.senderId ?
-                            'w-full flex flex-row justify-start items-end' : 'w-full flex flex-row justify-end items-end'}>
-                          <p
+                      {activeChatUserChats?.userChats?.map((chat, index) => {
+                        const isLast = index === activeChatUserChats.userChats.length - 1;
+                        return (
+                          <div key={index}
+                            ref={isLast ? mobileLastMessageRef : null}
                             className={activeChatUserChats?.userData?.user._id === chat?.senderId ?
-                              'themeCard w-fit px-2 py-1 rounded-md rounded-bl-none mb-2' : 'themeCard w-fit px-2 py-1 rounded-md rounded-br-none mb-2'}
-                          >{chat.text}</p>
-                          <p className='ps-1 pb-2 m-0' style={{ fontSize: "9px" }}>{convertToIST(chat.createdAt)}</p>
-                        </div>)
+                              'w-full flex flex-row justify-start items-end' : 'w-full flex flex-row justify-end items-end'}>
+                            <p
+                              className={activeChatUserChats?.userData?.user._id === chat?.senderId ?
+                                'themeCard w-fit px-2 py-1 rounded-md rounded-bl-none mb-2' : 'themeCard w-fit px-2 py-1 rounded-md rounded-br-none mb-2'}
+                            >{chat.text}</p>
+                            <p className='ps-1 pb-2 m-0' style={{ fontSize: "9px" }}>{convertToIST(chat.createdAt)}</p>
+                          </div>);
+                      })
                       }
                       {(Array.isArray(activeChatUserChats?.userChats) && activeChatUserChats?.userChats.length === 0) ?
                         <div className='w-full h-full flex justify-center items-center'>
@@ -145,7 +161,7 @@ export default function Chat() {
                   <Button extraClassNames="w-full m-0" name="Add New User" onClick={() => findNewUser ? setFindNewUser(false) : setFindNewUser(true)} />
                 </div>
                 {list?.map((chatUser, index) =>
-                  <ChatCard onClick={() => { getFullChatMessages(index); setMobileActiveChat(true) }}
+                  <ChatCard onClick={() => { getFullChatMessages(index); setMobileActiveChat(true); mobileLastMessageRef.current= null;}}
                     userId={chatUser.user._id} name={chatUser.user.name} key={chatUser.user._id}
                     lastMessage={user?._id === chatUser.lastMessage.senderId
                       ? `You: ${chatUser.lastMessage.text}`
@@ -216,8 +232,11 @@ export default function Chat() {
           <div className='themeCard h-full rounded-md flex justify-center items-center' style={{ width: "95%" }}>
             {/* <img className='m-auto' src={ChatSectionBg} alt="img" /> */}
             <div style={{ overflowY: "scroll" }} className='w-full h-full p-3'>
-              {activeChatUserChats?.userChats?.map((chat, index) =>
+              {activeChatUserChats?.userChats?.map((chat, index) =>{
+                const isLast = index === activeChatUserChats.userChats.length - 1;
+                return(
                 <div key={index}
+                ref={isLast ? lastMessageRef : null}
                   className={activeChatUserChats?.userData?.user._id === chat?.senderId ?
                     'w-full flex flex-row justify-start items-end' : 'w-full flex flex-row justify-end items-end'}>
                   <p
@@ -225,7 +244,8 @@ export default function Chat() {
                       'themeCard w-fit px-2 py-1 rounded-md rounded-bl-none mb-2' : 'themeCard w-fit px-2 py-1 rounded-md rounded-br-none mb-2'}
                   >{chat.text}</p>
                   <p className='ps-1 pb-2 m-0' style={{ fontSize: "9px" }}>{convertToIST(chat.createdAt)}</p>
-                </div>)
+                </div>);
+                })
               }
               {(Array.isArray(activeChatUserChats?.userChats) && activeChatUserChats?.userChats.length === 0) ?
                 <div className='w-full h-full flex justify-center items-center'>

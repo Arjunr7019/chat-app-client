@@ -5,7 +5,7 @@ import { ChatContext } from '../context/ChatContext';
 export default function ChatCard({name ,lastMessage,onClick,userId,extraClassNames}) {
     const{onlineUsers} = useContext(ChatContext);
 
-    console.log(onlineUsers?.some((user)=> user?.userId === userId) ? `${name}: online` : ``);
+    // console.log(onlineUsers?.some((user)=> user?.userId === userId) ? `${name}: online` : ``);
     return (
         <div onClick={onClick} 
         className={`themeCard flex flex-row items-center rounded-md py-2 px-1.5 cursor-pointer relative ${extraClassNames}`}>
