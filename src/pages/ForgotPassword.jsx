@@ -8,7 +8,7 @@ import { Toaster, toast } from 'sonner'
 
 export default function ForgotPassword() {
     const [inputData, setInputData] = useState({ email: "", otp: "", password: "" });
-    const { otpSendSuccessfully, getOtp, verifyOtp,otpVerifiedSuccessfully,updateNewPassword } = useContext(UserAuthContext);
+    const { otpSendSuccessfully, getOtp, verifyOtp, otpVerifiedSuccessfully, updateNewPassword } = useContext(UserAuthContext);
     const [secondsLeft, setSecondsLeft] = useState(60);
     const [sessionTimeoutSecondsLeft, setSessionTimeoutSecondsLeft] = useState(240);
 
@@ -24,7 +24,7 @@ export default function ForgotPassword() {
         return () => clearInterval(timer);
     }, [secondsLeft, otpSendSuccessfully])
 
-     useEffect(() => {
+    useEffect(() => {
         let timer;
 
         if (otpVerifiedSuccessfully === "!border-green-500" && sessionTimeoutSecondsLeft > 0) {
@@ -33,11 +33,11 @@ export default function ForgotPassword() {
             }, 1000);
         }
 
-        if(sessionTimeoutSecondsLeft===0){
+        if (sessionTimeoutSecondsLeft === 0) {
             toast.warning('Session timeout, try agin later')
-            setTimeout(()=>{
+            setTimeout(() => {
                 window.location.reload();
-            },5000);
+            }, 5000);
         }
 
         return () => clearInterval(timer);
@@ -57,8 +57,15 @@ export default function ForgotPassword() {
                         type="Text" />
                     <Button name={otpSendSuccessfully ? secondsLeft === 0 ? "Resend" : `${secondsLeft}` : "Get OTP"} extraClassNames="w-1/4 mb-4 ms-2"
                         onClick={() => {
-                            getOtp(inputData.email);
-                            inputData.email === "" ? toast.warning('Email input is empty') : "";
+                            toast.promise(getOtp(inputData.email), {
+                                loading: 'Loading...',
+                                success: (data) => {
+                                    return `${data}`;
+                                },
+                                error: (error) => {
+                                    return `${error}`;
+                                },
+                            })
                         }} />
                 </div>
                 {otpSendSuccessfully ? <div>
@@ -68,9 +75,20 @@ export default function ForgotPassword() {
                             onChange={(e) => setInputData(val => { return { ...val, otp: e.target.value } })}
                             name="OTP"
                             type="Text"
-                            extraClassNames={otpVerifiedSuccessfully} />
+                            extraClassNames={otpVerifiedSuccessfully}
+                            disabled={otpVerifiedSuccessfully === "!border-green-500" ? true : false} />
                         <Button name="Verify" extraClassNames="w-1/4 mb-4 ms-2"
-                        onClick={()=> verifyOtp(inputData.email,inputData.otp)}/>
+                            onClick={() => {
+                                toast.promise(verifyOtp(inputData.email, inputData.otp), {
+                                    loading: 'Checking...',
+                                    success: (data) => {
+                                        return `${data}`;
+                                    },
+                                    error: (error) => {
+                                        return `${error}`;
+                                    },
+                                })
+                            }} />
                     </div>
                     <Input
                         value={inputData.password}
@@ -82,7 +100,17 @@ export default function ForgotPassword() {
                     <Link className='text-center cursor-pointer w-full text-sm' to="/login">Back to Login</Link>
                 </div>
                 {otpSendSuccessfully ? <div className='flex justify-center items-center mb-3'>
-                    <Button name="Submit" onClick={()=> updateNewPassword(inputData.email,inputData.password)} />
+                    <Button name="Submit" onClick={() => {
+                        toast.promise(updateNewPassword(inputData.email, inputData.password), {
+                            loading: 'Updating...',
+                            success: (data) => {
+                                return `${data}`;
+                            },
+                            error: (error) => {
+                                return `${error}`;
+                            },
+                        })
+                    }} />
                 </div> : <></>}
             </div>
         </div>

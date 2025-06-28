@@ -35,27 +35,28 @@ export const UserAuthProvider = ({ children }) => {
         })
     }, [])
 
-    const getOtp = (email) => {
-        if (email) {
+    const getOtp = (email) => new Promise((resolve, reject) => {
+        if (email !== "") {
             fetch(`${baseUrl}/forgotPassword/${email}`).then((response) => {
                 if (response.status === 200) {
+                    resolve("OTP Sent Successfully")
                     return response.json();
                 } else {
+                    reject("error while sending OTP try again later")
                     throw new Error(`Failed with status: ${response.status}`);
                 }
             }).then((data) => {
                 setOtpSendSuccessfully(true);
-                toast.success('OTP Sent Successfully')
             }).catch(err => {
                 console.log("error:", err);
-                toast.warning(err)
             })
         } else {
+            toast.warning("Error: empty email field")
             console.log("Error: empty email field");
         }
-    };
+    })
 
-    const verifyOtp = (email, otp) => {
+    const verifyOtp = (email, otp) =>new Promise((resolve, reject)=>{
         if (email !== "" && otp !== "") {
             fetch(`${baseUrl}/forgotPassword/verifyOtp`, {
                 method: "POST",
@@ -68,24 +69,25 @@ export const UserAuthProvider = ({ children }) => {
                 }),
             }).then((response) => {
                 if (response.status === 200) {
+                    resolve('OTP Verified Successfully')
                     return response.json();
                 } else {
+                    reject("not valid OTP")
                     throw new Error(`Failed with status: ${response.status}`);
                 }
             }).then((data) => {
-                toast.success('OTP Verified Successfully');
                 setOtpVerifiedSuccessfully("!border-green-500")
             }).catch(err => {
                 console.log("error:", err);
-                toast.warning(err)
                 setOtpVerifiedSuccessfully("!border-red-500")
             })
         } else {
+            toast.warning("Error:email and otp field are empty")
             console.log("Error:email and otp field are empty");
         }
-    }
+    })
 
-    const updateNewPassword = (email, password) => {
+    const updateNewPassword = (email, password) => new Promise((resolve, reject)=>{
         if (email !== "" && password !== "") {
             fetch(`${baseUrl}/forgotPassword/updateNewPassword`, {
                 method: "POST",
@@ -98,12 +100,13 @@ export const UserAuthProvider = ({ children }) => {
                 }),
             }).then((response) => {
                 if (response.status === 200) {
+                    resolve("New Password Updated Successfully and Reridecting to Login page")
                     return response.json();
                 } else {
+                    reject("error while updating password. try again later")
                     throw new Error(`Failed with status: ${response.status}`);
                 }
             }).then((data) => {
-                toast.success('New Password Updated Successfully');
                 setTimeout(() => {
                     setOtpSendSuccessfully(false);
                     setOtpVerifiedSuccessfully("");
@@ -111,13 +114,13 @@ export const UserAuthProvider = ({ children }) => {
                 }, 5000);
             }).catch(err => {
                 console.log("error:", err);
-                toast.warning(err)
                 // setOtpVerifiedSuccessfully("!border-red-500")
             })
         } else {
+            toast.warning("Error:email and new password field are empty")
             console.log("Error:email and new password field are empty");
         }
-    }
+    })
 
     return (
         <UserAuthContext.Provider

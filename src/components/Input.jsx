@@ -3,7 +3,7 @@ import '../App.css';
 import { IoEyeOutline } from "react-icons/io5";
 import { IoEyeOffOutline } from "react-icons/io5";
 
-export default function Input({ name, type,value,onChange,extraClassNames }) {
+export default function Input({ name, type,value,onChange,extraClassNames,disabled }) {
     const [showPassword,setShowPassword] = useState(false);
     const nameCheck = ["Message","Password","OTP","New Password","Gender","Name"]
     const passwordFieldCheck = ["New Password","Password"]
@@ -18,7 +18,8 @@ export default function Input({ name, type,value,onChange,extraClassNames }) {
                 type={showPassword ? "text": type}
                 autoComplete={nameCheck.includes(name) ? "off" : "Email"} 
                 onChange={onChange}
-                value={value}/>
+                value={value}
+                disabled={disabled}/>
             {name === "Message" ? <></> : <label className={value===""?'inputLabel':'inputLabelActive'} htmlFor="inputText">{name}</label>}
             {passwordFieldCheck.includes(name) ? <a className='absolute right-2 top-0 translate-y-1/2 h-5 cursor-pointer flex justify-center items-center' 
              onClick={()=> showPassword ? setShowPassword(false):setShowPassword(true)}>{
