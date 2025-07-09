@@ -180,11 +180,11 @@ export default function Chat() {
                 {list?.map((chatUser, index) =>
                   <ChatCard onClick={() => { getFullChatMessages(index); setMobileActiveChat(true); mobileLastMessageRef.current = null; }}
                     userId={chatUser.user._id} name={chatUser.user.name} key={chatUser.user._id}
-                    lastMessage={user?._id === chatUser.lastMessage.senderId
-                      ? `You: ${chatUser.lastMessage.text}`
-                      : chatUser.lastMessage.text === ""
+                    lastMessage={user?._id === chatUser?.lastMessage?.senderId
+                      ? `You: ${chatUser?.lastMessage?.text}`
+                      : chatUser?.lastMessage?.text === ""
                         ? ""
-                        : `${chatUser.user.name}: ${chatUser.lastMessage.text}`
+                        : chatUser?.lastMessage?.text ? `${chatUser?.user?.name}: ${chatUser?.lastMessage?.text}`:"LastMessage"
                     }
                     extraClassNames="mb-2 w-full" />
                 )}
@@ -222,11 +222,11 @@ export default function Chat() {
               {list?.map((chatUser, index) =>
                 <ChatCard onClick={() => getFullChatMessages(index)}
                   userId={chatUser.user._id} name={chatUser.user.name} key={chatUser.user._id}
-                  lastMessage={user?._id === chatUser.lastMessage.senderId
-                    ? `You: ${chatUser.lastMessage.text}`
-                    : chatUser.lastMessage.text === ""
+                  lastMessage={user?._id === chatUser?.lastMessage?.senderId
+                    ? `You: ${chatUser?.lastMessage?.text}`
+                    : chatUser?.lastMessage?.text === ""
                       ? ""
-                      : `${chatUser.user.name}: ${chatUser.lastMessage.text}`
+                      : chatUser?.lastMessage?.text ? `${chatUser?.user?.name}: ${chatUser?.lastMessage?.text}`:"LastMessage"
                   }
                   extraClassNames="mb-2 w-4/5" />
               )}

@@ -41,6 +41,8 @@ export const UserAuthProvider = ({ children }) => {
                 if (response.status === 200) {
                     resolve("OTP Sent Successfully")
                     return response.json();
+                } else if (response.status === 429) {
+                    reject("Too many requests from this IP, please try again after 15 minutes.");
                 } else {
                     reject("error while sending OTP try again later")
                     throw new Error(`Failed with status: ${response.status}`);
@@ -56,7 +58,7 @@ export const UserAuthProvider = ({ children }) => {
         }
     })
 
-    const verifyOtp = (email, otp) =>new Promise((resolve, reject)=>{
+    const verifyOtp = (email, otp) => new Promise((resolve, reject) => {
         if (email !== "" && otp !== "") {
             fetch(`${baseUrl}/forgotPassword/verifyOtp`, {
                 method: "POST",
@@ -71,6 +73,8 @@ export const UserAuthProvider = ({ children }) => {
                 if (response.status === 200) {
                     resolve('OTP Verified Successfully')
                     return response.json();
+                } else if (response.status === 429) {
+                    reject("Too many requests from this IP, please try again after 15 minutes.");
                 } else {
                     reject("not valid OTP")
                     throw new Error(`Failed with status: ${response.status}`);
@@ -87,7 +91,7 @@ export const UserAuthProvider = ({ children }) => {
         }
     })
 
-    const updateNewPassword = (email, password) => new Promise((resolve, reject)=>{
+    const updateNewPassword = (email, password) => new Promise((resolve, reject) => {
         if (email !== "" && password !== "") {
             fetch(`${baseUrl}/forgotPassword/updateNewPassword`, {
                 method: "POST",
@@ -102,6 +106,8 @@ export const UserAuthProvider = ({ children }) => {
                 if (response.status === 200) {
                     resolve("New Password Updated Successfully and Reridecting to Login page")
                     return response.json();
+                } else if (response.status === 429) {
+                    reject("Too many requests from this IP, please try again after 15 minutes.");
                 } else {
                     reject("error while updating password. try again later")
                     throw new Error(`Failed with status: ${response.status}`);

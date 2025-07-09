@@ -2,7 +2,8 @@ import React, { createContext, useState, useEffect } from "react";
 import { baseUrl } from "../assets/Endpoints";
 import { webSoketUrl } from "../assets/Endpoints";
 import Services from "../localStorage/Services";
-import { io } from "socket.io-client"
+import { io } from "socket.io-client";
+import { Toaster, toast } from 'sonner'
 
 export const ChatContext = createContext(null);
 
@@ -82,6 +83,8 @@ export const ChatContextProvider = ({ children, user }) => {
         if (response.status === 200) {
           setIsUserChatLoading(false);
           return response.json();
+        } else if (response.status === 429) {
+          toast.warning("Too many requests from this IP, please try again after 15 minutes.");
         } else {
           throw new Error(`Failed with status: ${response.status}`);
         }
@@ -104,51 +107,58 @@ export const ChatContextProvider = ({ children, user }) => {
     }
   }, [user]);
 
-  //getting active chat users data
-  // useEffect(() => {
-  //   let members = []
-  //   if (user?._id) {
-  //     fetch(`${baseUrl}/user`).then((response) => {
-  //       if (response.status === 200) {
-  //         return response.json();
-  //       } else {
-  //         throw new Error(`Failed with status: ${response.status}`);
-  //       }
-  //     }).then((data) => {
-  //       // console.log(data)
-  //       data.map((e) => {
-  //         if (members.includes(e._id)) {
-  //           setUserChatsList(item => [...item, e]);
-  //           console.log("membersId", e._id);
-  //         }
-  //       })
-  //     }).catch(err => {
-  //       console.log("error:", err);
-  //     })
-  //   }
-  // }, [userChats]);
-
-  // console.log("userChats", userChats);
-  // console.log("userChatsList", userChatsList);
-  // console.log("chatIdAndUserId", chatIdAndUserId)
-
-  // to get last message api call
+  // getting active chat users data
   useEffect(() => {
+    let members = []
+    console.log(user?._id)
+    userChats?.map((e) => {
+      let findOtherUser = e.members.find((cu) => cu !== user._id)
+      members.push(findOtherUser);
+    })
     if (user?._id) {
-      // console.log("chatIdAndUserId", chatIdAndUserId)
-      fetch(`${baseUrl}/messages/lastMessage/${chatIdAndUserId}`).then((response) => {
+      fetch(`${baseUrl}/user`).then((response) => {
         if (response.status === 200) {
           return response.json();
         } else {
           throw new Error(`Failed with status: ${response.status}`);
         }
       }).then((data) => {
-        setUserChatsList(data)
+        // console.log(data)
+        data.map((e) => {
+          if (members.includes(e._id)) {
+           setUserChatsList(prev => ([...prev, { user: e }]));
+            console.log("membersId", e._id);
+          }
+        })
       }).catch(err => {
         console.log("error:", err);
       })
     }
-  }, [userChats])
+  }, [userChats]);
+
+  // console.log("userChats", userChats);
+  console.log("userChatsList", userChatsList);
+  // console.log("chatIdAndUserId", chatIdAndUserId)
+
+  // to get last message api call
+  // useEffect(() => {
+  //   if (user?._id) {
+  //     // console.log("chatIdAndUserId", chatIdAndUserId)
+  //     fetch(`${baseUrl}/messages/lastMessage/${chatIdAndUserId}`).then((response) => {
+  //       if (response.status === 200) {
+  //         return response.json();
+  //       } else if (response.status === 429) {
+  //         toast.warning("Too many requests from this IP, please try again after 15 minutes.");
+  //       } else {
+  //         throw new Error(`Failed with status: ${response.status}`);
+  //       }
+  //     }).then((data) => {
+  //       setUserChatsList(data)
+  //     }).catch(err => {
+  //       console.log("error:", err);
+  //     })
+  //   }
+  // }, [userChats])
 
   //getting full chats of particular user
   const getFullChatMessages = (index) => {
@@ -158,6 +168,8 @@ export const ChatContextProvider = ({ children, user }) => {
     fetch(`${baseUrl}/messages/${userChats[index]._id}`).then((response) => {
       if (response.status === 200) {
         return response.json();
+      } else if (response.status === 429) {
+        toast.warning("Too many requests from this IP, please try again after 15 minutes.");
       } else {
         throw new Error(`Failed with status: ${response.status}`);
       }
@@ -188,6 +200,8 @@ export const ChatContextProvider = ({ children, user }) => {
       }).then((response) => {
         if (response.status === 200) {
           return response.json();
+        } else if (response.status === 429) {
+          toast.warning("Too many requests from this IP, please try again after 15 minutes.");
         } else {
           throw new Error(`Failed with status: ${response.status}`);
         }
@@ -206,6 +220,8 @@ export const ChatContextProvider = ({ children, user }) => {
     fetch(`${baseUrl}/user/findfriend/${email}`).then((response) => {
       if (response.status === 200) {
         return response.json();
+      } else if (response.status === 429) {
+        toast.warning("Too many requests from this IP, please try again after 15 minutes.");
       } else {
         throw new Error(`Failed with status: ${response.status}`);
       }
@@ -234,6 +250,8 @@ export const ChatContextProvider = ({ children, user }) => {
       }).then((response) => {
         if (response.status === 200) {
           return response.json();
+        } else if (response.status === 429) {
+          toast.warning("Too many requests from this IP, please try again after 15 minutes.");
         } else {
           throw new Error(`Failed with status: ${response.status}`);
         }
@@ -254,6 +272,8 @@ export const ChatContextProvider = ({ children, user }) => {
         if (response.status === 200) {
           setIsUserChatLoading(false);
           return response.json();
+        } else if (response.status === 429) {
+          toast.warning("Too many requests from this IP, please try again after 15 minutes.");
         } else {
           throw new Error(`Failed with status: ${response.status}`);
         }
@@ -292,6 +312,7 @@ export const ChatContextProvider = ({ children, user }) => {
       createNewChat,
       cleanUpData
     }}>
+      <Toaster position="top-center" />
       {children}
     </ChatContext.Provider>
   )
